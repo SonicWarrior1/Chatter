@@ -1,0 +1,46 @@
+{
+  "project_info": {
+    "project_number": "458236514278",
+    "project_id": "fwitch-8e933",
+    "storage_bucket": "fwitch-8e933.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:458236514278:android:d3c3ec6a70f3b55314d027",
+        "android_client_info": {
+          "package_name": "com.example.fwitch"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "458236514278-4jiv69demommem2je41mc41sa85a665c.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCFEQrYiWq5qV6AOq8aHcgkqq-Wz8f7ZDg"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "458236514278-4jiv69demommem2je41mc41sa85a665c.apps.googleusercontent.com",
+              "client_type": 3
+            },
+            {
+              "client_id": "458236514278-jr24a5dllvmf0lsdns30sqs7lgk8bd8o.apps.googleusercontent.com",
+              "client_type": 2,
+              "ios_info": {
+                "bundle_id": "io.flutter.flutter.app"
+              }
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
