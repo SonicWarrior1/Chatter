@@ -1,12 +1,10 @@
-// ignore_for_file: must_be_immutable, prefer_const_constructors
-
 import 'package:flutter/material.dart';
-import 'package:fwitch/authentication/login/controller/login_controller.dart';
+import 'package:fwitch/authentication/signup/controller/signup_controller.dart';
 import 'package:get/get.dart';
 
-class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
-  LoginController loginController = Get.put(LoginController());
+class SignupPage extends StatelessWidget {
+  SignupPage({Key? key}) : super(key: key);
+  final signupController = Get.put(SignUpController());
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -14,20 +12,51 @@ class LoginPage extends StatelessWidget {
       child: Scaffold(
         resizeToAvoidBottomInset: false,
         appBar: AppBar(
-          title: Text("Login"),
+          title: const Text("Sign Up"),
         ),
         body: Padding(
           padding: const EdgeInsets.symmetric(horizontal: 5),
           child: Form(
-            key: loginController.formkey,
+            key: signupController.formKey,
             child: Column(
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 TextFormField(
-                  controller: loginController.loginEmail,
-                  decoration: InputDecoration(
-                    label: Text("Email"),
+                  controller: signupController.nameController,
+                  decoration: const InputDecoration(
+                    label: Text("Name"),
                   ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please Enter Name";
+                    } else {
+                      return null;
+                    }
+                  },
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  controller: signupController.usernameController,
+                  validator: (value) {
+                    if (value == null || value.isEmpty) {
+                      return "Please Enter Username";
+                    } else {
+                      return null;
+                    }
+                  },
+                  decoration: const InputDecoration(
+                    label: Text("Username"),
+                  ),
+                  autovalidateMode: AutovalidateMode.onUserInteraction,
+                ),
+                const SizedBox(
+                  height: 20,
+                ),
+                TextFormField(
+                  controller: signupController.emailController,
                   validator: (value) {
                     if (RegExp(
                             r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
@@ -37,17 +66,20 @@ class LoginPage extends StatelessWidget {
                       return "Please enter valid email";
                     }
                   },
+                  decoration: const InputDecoration(
+                    label: Text("Email"),
+                  ),
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-                SizedBox(
+                const SizedBox(
                   height: 20,
                 ),
                 TextFormField(
-                  controller: loginController.loginPassword,
-                  decoration: InputDecoration(
+                  controller: signupController.passworController,
+                  decoration: const InputDecoration(
                     label: Text("Password"),
                   ),
-                  validator: (value) {
+                  validator: (String? value) {
                     if (value == null || value.isEmpty) {
                       return 'Please enter your password.'.tr;
                     }
@@ -56,29 +88,8 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-                SizedBox(
-                  width: 250,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.onSecondary),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ))),
-                    onPressed: () {
-                      if (loginController.formkey.currentState!.validate())
-                        loginController.googleLogin();
-                    },
-                    child: Text(
-                      "Google Login",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .copyWith(color: Colors.black),
-                    ),
-                  ),
+                const SizedBox(
+                  height: 20,
                 ),
                 Padding(
                   padding: EdgeInsets.only(
@@ -95,11 +106,11 @@ class LoginPage extends StatelessWidget {
                             borderRadius: BorderRadius.circular(18.0),
                           ))),
                       onPressed: () {
-                        if (loginController.formkey.currentState!.validate())
-                          loginController.loginUser();
+                        if (signupController.formKey.currentState!.validate())
+                          signupController.signup();
                       },
                       child: Text(
-                        "Login",
+                        "Signup",
                         style: Theme.of(context)
                             .textTheme
                             .labelLarge!
