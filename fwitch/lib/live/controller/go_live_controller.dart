@@ -4,6 +4,8 @@ import 'dart:typed_data';
 import 'package:file_picker/file_picker.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
+import 'package:flutter/material.dart';
+import 'package:fwitch/broadcast/views/broadcast_screen.dart';
 import 'package:fwitch/resources/firestore_methods.dart';
 import 'package:get/get.dart';
 
@@ -24,10 +26,13 @@ class GoLiveController extends GetxController {
   }
 
   goLiveStream(BuildContext context) async {
-    await FirestoreMethods()
+    String channelId = await FirestoreMethods()
         .startLiveStream(context, titleController.text, image.value);
-    // if (channelId.isNotEmpty) {
-    //   Get.snackbar("", "Live Stream Started");
-    // }
+    if (channelId.isNotEmpty) {
+      Get.snackbar("", "Live Stream Started");
+      Navigator.of(context).push(MaterialPageRoute(
+          builder: (context) =>
+              BroadcastScreen(isBroadcaster: true, channelId: channelId)));
+    }
   }
 }

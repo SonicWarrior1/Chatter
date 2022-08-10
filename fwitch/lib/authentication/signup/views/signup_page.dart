@@ -107,7 +107,7 @@ class SignupPage extends StatelessWidget {
                           ))),
                       onPressed: () {
                         if (signupController.formKey.currentState!.validate())
-                          signupController.signup();
+                          signupController.signup(context);
                       },
                       child: Text(
                         "Signup",

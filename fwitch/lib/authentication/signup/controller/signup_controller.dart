@@ -11,12 +11,12 @@ class SignUpController extends GetxController {
   TextEditingController usernameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
 
-  void signup() async {
+  void signup(BuildContext context) async {
     bool res = await _authMethods.signupUser(emailController.text,
-        usernameController.text, passworController.text, nameController.text);
+        usernameController.text, passworController.text, nameController.text,context);
     SharedPrefs.setUsername(usernameController.text);
     if (res) {
-      Get.toNamed('/home');
+      Get.offAllNamed('/home');
     }
   }
 }

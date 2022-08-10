@@ -11,14 +11,14 @@ class LoginController extends GetxController {
   TextEditingController loginPassword = TextEditingController();
   GlobalKey<FormState> formkey = GlobalKey<FormState>();
   RxBool isLoggingIn = false.obs;
-  loginUser() async {
+  loginUser(BuildContext context) async {
     isLoggingIn.value = true;
     bool res =
-        await _authMethods.loginUser(loginEmail.text, loginPassword.text);
+        await _authMethods.loginUser(loginEmail.text, loginPassword.text,context);
     isLoggingIn.value = false;
     if (res) {
-      Get.toNamed('/home');
-      _authMethods.getUserDetails();
+      Get.offAllNamed('/home');
+      // _authMethods.getUserDetails();
     }
   }
 
@@ -27,7 +27,7 @@ class LoginController extends GetxController {
     User? user = await _authMethods.googleSingin();
     isLoggingIn.value = false;
     if (user != null) {
-      Get.toNamed('/home');
+      Get.offAllNamed('/home');
     }
   }
 }
