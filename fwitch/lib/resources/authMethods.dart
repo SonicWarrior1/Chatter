@@ -7,7 +7,8 @@ import 'package:google_sign_in/google_sign_in.dart';
 class AuthMethods {
   final _userRef = FirebaseFirestore.instance.collection('users');
   final _auth = FirebaseAuth.instance;
-
+  RxString uid = "".obs;
+  RxString username = "".obs;
   Future<bool> signupUser(
       String email, String username, String password, String name) async {
     bool res = false;
@@ -37,7 +38,7 @@ class AuthMethods {
 
   getUserDetails() {
     var currentUser = _auth.currentUser;
-    print(currentUser!.displayName);
+    uid.value = currentUser!.uid;
   }
 
   googleSingin() async {

@@ -2,6 +2,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/controller/login_controller.dart';
+import 'package:fwitch/shared_prefs.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
@@ -56,58 +57,70 @@ class LoginPage extends StatelessWidget {
                   obscureText: true,
                   autovalidateMode: AutovalidateMode.onUserInteraction,
                 ),
-                SizedBox(
-                  width: 250,
-                  child: ElevatedButton(
-                    style: ButtonStyle(
-                        backgroundColor: MaterialStateProperty.all(
-                            Theme.of(context).colorScheme.onSecondary),
-                        shape:
-                            MaterialStateProperty.all<RoundedRectangleBorder>(
-                                RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(18.0),
-                        ))),
-                    onPressed: () {
-                      if (loginController.formkey.currentState!.validate())
-                        loginController.googleLogin();
-                    },
-                    child: Text(
-                      "Google Login",
-                      style: Theme.of(context)
-                          .textTheme
-                          .labelLarge!
-                          .copyWith(color: Colors.black),
-                    ),
-                  ),
-                ),
-                Padding(
-                  padding: EdgeInsets.only(
-                      bottom: MediaQuery.of(context).viewInsets.bottom),
-                  child: SizedBox(
-                    width: 250,
-                    child: ElevatedButton(
-                      style: ButtonStyle(
-                          backgroundColor: MaterialStateProperty.all(
-                              Theme.of(context).colorScheme.onSecondary),
-                          shape:
-                              MaterialStateProperty.all<RoundedRectangleBorder>(
-                                  RoundedRectangleBorder(
-                            borderRadius: BorderRadius.circular(18.0),
-                          ))),
-                      onPressed: () {
-                        if (loginController.formkey.currentState!.validate())
-                          loginController.loginUser();
-                      },
-                      child: Text(
-                        "Login",
-                        style: Theme.of(context)
-                            .textTheme
-                            .labelLarge!
-                            .copyWith(color: Colors.black),
+                loginController.isLoggingIn.isTrue
+                    ? Center(
+                        child: CircularProgressIndicator(),
+                      )
+                    : Column(
+                        children: [
+                          SizedBox(
+                            width: 250,
+                            child: ElevatedButton(
+                              style: ButtonStyle(
+                                  backgroundColor: MaterialStateProperty.all(
+                                      Theme.of(context)
+                                          .colorScheme
+                                          .onSecondary),
+                                  shape: MaterialStateProperty.all<
+                                          RoundedRectangleBorder>(
+                                      RoundedRectangleBorder(
+                                    borderRadius: BorderRadius.circular(18.0),
+                                  ))),
+                              onPressed: () {
+                                loginController.googleLogin();
+                              },
+                              child: Text(
+                                "Google Login",
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .labelLarge!
+                                    .copyWith(color: Colors.black),
+                              ),
+                            ),
+                          ),
+                          Padding(
+                            padding: EdgeInsets.only(
+                                bottom:
+                                    MediaQuery.of(context).viewInsets.bottom),
+                            child: SizedBox(
+                              width: 250,
+                              child: ElevatedButton(
+                                style: ButtonStyle(
+                                    backgroundColor: MaterialStateProperty.all(
+                                        Theme.of(context)
+                                            .colorScheme
+                                            .onSecondary),
+                                    shape: MaterialStateProperty.all<
+                                            RoundedRectangleBorder>(
+                                        RoundedRectangleBorder(
+                                      borderRadius: BorderRadius.circular(18.0),
+                                    ))),
+                                onPressed: () {
+                                  if (loginController.formkey.currentState!
+                                      .validate()) loginController.loginUser();
+                                },
+                                child: Text(
+                                  "Login",
+                                  style: Theme.of(context)
+                                      .textTheme
+                                      .labelLarge!
+                                      .copyWith(color: Colors.black),
+                                ),
+                              ),
+                            ),
+                          )
+                        ],
                       ),
-                    ),
-                  ),
-                )
               ],
             ),
           ),

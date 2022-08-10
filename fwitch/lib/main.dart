@@ -1,11 +1,13 @@
 // ignore_for_file: prefer_const_constructors
 
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/views/login_page.dart';
 import 'package:fwitch/authentication/signup/views/signup_page.dart';
 import 'package:fwitch/home/views/home.dart';
 import 'package:fwitch/onboarding.dart';
+import 'package:fwitch/shared_prefs.dart';
 import 'package:fwitch/theme.dart';
 import 'package:get/get.dart';
 
@@ -20,16 +22,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return GetMaterialApp(
-
       routes: {
         '/': (context) => onBoarding(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
-        '/home':(context)=>home(),
+        '/home': (context) => home(),
       },
       title: "Fwitch",
-      // theme: MyTheme.lightTheme,
-      theme: MyTheme.darkTheme,
+      // home:  ? home() : onBoarding(),
+      theme: MyTheme.lightTheme,
+      darkTheme: MyTheme.darkTheme,
+      themeMode: ThemeMode.system,
       debugShowCheckedModeBanner: false,
     );
   }
