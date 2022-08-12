@@ -2,6 +2,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/src/foundation/key.dart';
 import 'package:flutter/src/widgets/framework.dart';
+import 'package:fwitch/Feed%20Screen/views/feed_screen.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/authMethods.dart';
 import 'package:fwitch/home/controller/home_controller.dart';
@@ -39,13 +40,7 @@ class home extends StatelessWidget {
           body: IndexedStack(
             index: homeController.pageindex.value,
             // alignment: Alignment.center,
-            children: [
-              Obx(() {
-                return Text(homeController.username.value);
-              }),
-              GoLiveScreen(),
-              Text("c")
-            ],
+            children: [FeedCreen(), GoLiveScreen(), Text("c")],
           ),
           bottomNavigationBar: BottomNavigationBar(
               onTap: homeController.setPage,

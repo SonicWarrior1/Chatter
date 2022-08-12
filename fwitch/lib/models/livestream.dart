@@ -29,13 +29,12 @@ class LiveStream {
 
   factory LiveStream.fromMap(Map<String, dynamic> map) {
     return LiveStream(
-      title: map['title'] ?? '',
-      image: map['image'] ?? '',
-      uid: map['uid'] ?? '',
-      username: map['username'] ?? '',
-      startedAt: map['startedAt'] ?? '',
-      viewers: map['viewers']?.toInt() ?? 0,
-      channelId: map['channelId'] ?? '',
-    );
+        title: map['title'] ?? '',
+        image: map['image'] ?? '',
+        uid: map['uid'] ?? '',
+        username: map['username'] ?? '',
+        startedAt: map['startedAt'] ?? '',
+        viewers: map['viewers']?.toInt() ?? 0,
+        channelId: map['channelId'] ?? '');
   }
 }

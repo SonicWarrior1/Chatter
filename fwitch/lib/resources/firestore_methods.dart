@@ -8,6 +8,7 @@ import 'package:fwitch/resources/authMethods.dart';
 import 'package:fwitch/resources/storage_methods.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
+import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
   final _firestore = FirebaseFirestore.instance.collection('livestream');
@@ -65,6 +66,26 @@ class FirestoreMethods {
       await _firestore.doc(channelId).delete();
     } catch (e) {
       debugPrint(e.toString());
+    }
+  }
+
+  Future<void> chat(String text, String channelId, BuildContext context) async {
+    final user = Provider.of<UserProvider>(context, listen: false);
+    try {
+      String commentId = Uuid().v1();
+      await _firestore
+          .doc(channelId)
+          .collection('comments')
+          .doc(commentId)
+          .set({
+        'username': user.user.username,
+        'message': text,
+        'uid': user.user.uid,
+        'createdAt': DateTime.now(),
+        'commentId': commentId, 
+      });
+    } on FirebaseException catch (e) {
+      Get.snackbar("", e.message!);
     }
   }
 
