@@ -15,6 +15,17 @@ class LiveStream {
       required this.startedAt,
       required this.viewers,
       required this.channelId});
+
+  factory LiveStream.fromJson(Map<String, dynamic> json) => LiveStream(
+        title: json["title"],
+        image: json["image"],
+        uid: json["uid"],
+        username: json["username"],
+        startedAt: json["startedAt"],
+        viewers: json["viewers"],
+        channelId: json["channelId"],
+      );
+
   Map<String, dynamic> toMap() {
     return {
       'title': title,
