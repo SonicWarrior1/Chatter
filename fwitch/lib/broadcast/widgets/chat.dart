@@ -29,7 +29,9 @@ class _ChatState extends State<Chat> {
   Widget build(BuildContext context) {
     final userProvider = Provider.of<UserProvider>(context).user;
     return SizedBox(
-      width: double.infinity,
+      width: MediaQuery.of(context).size.width > 600
+          ? MediaQuery.of(context).size.width * 0.25
+          : double.infinity,
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: [

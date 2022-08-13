@@ -19,51 +19,59 @@ class GoLiveScreen extends StatelessWidget {
     return SafeArea(
         child: Padding(
       padding: EdgeInsets.symmetric(horizontal: 20, vertical: 20),
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        children: [
-          GestureDetector(
-              onTap: () async {
-                goLiveController.isImageLoading.value = true;
-                Uint8List? pickedImage = await goLiveController.pickImage();
-                if (pickedImage != null) {
-                  goLiveController.image.value = pickedImage;
-                  goLiveController.isImageLoading.value = false;
-                  // print(goLiveController.image!.value);
-                }
-              },
-              child: Column(
+      child: Center(
+        child: Container(
+          constraints: BoxConstraints(maxWidth: 600),
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Column(
                 children: [
-                  Obx(() {
-                    if (goLiveController.isImageLoading.isTrue) {
-                      return Center(
-                        child: CircularProgressIndicator(),
-                      );
-                    } else if (goLiveController.image.value.isNotEmpty) {
-                      return SizedBox(
-                        child: Image.memory(goLiveController.image.value),
-                      );
-                    } else {
-                      return DottedBorder(
-                        borderType: BorderType.RRect,
-                        radius: Radius.circular(10),
-                        child: Container(
-                          width: double.infinity,
-                          height: 200,
-                          child: Column(
-                            children: [
-                              Icon(Icons.folder_copy_outlined),
-                              Text("Select your Thumbnail")
-                            ],
-                            mainAxisAlignment: MainAxisAlignment.center,
-                            crossAxisAlignment: CrossAxisAlignment.center,
+                  GestureDetector(
+                    onTap: () async {
+                      goLiveController.isImageLoading.value = true;
+                      Uint8List? pickedImage =
+                          await goLiveController.pickImage();
+                      if (pickedImage != null) {
+                        goLiveController.image.value = pickedImage;
+                        goLiveController.isImageLoading.value = false;
+                      }
+                    },
+                    child: Obx(() {
+                      if (goLiveController.isImageLoading.isTrue) {
+                        return Center(
+                          child: CircularProgressIndicator(),
+                        );
+                      } else if (goLiveController.image.value.isNotEmpty) {
+                        return SizedBox(
+                          child: Image.memory(goLiveController.image.value),
+                        );
+                      } else {
+                        return DottedBorder(
+                          borderType: BorderType.RRect,
+                          radius: Radius.circular(10),
+                          child: Container(
+                            width: double.infinity,
+                            height: 200,
+                            child: Column(
+                              children: [
+                                Icon(Icons.folder_copy_outlined),
+                                Text("Select your Thumbnail")
+                              ],
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              crossAxisAlignment: CrossAxisAlignment.center,
+                            ),
                           ),
-                        ),
-                        color: Theme.of(context).colorScheme.onPrimaryContainer,
-                        dashPattern: [10, 4],
-                      );
-                    }
-                  }),
+                          color:
+                              Theme.of(context).colorScheme.onPrimaryContainer,
+                          dashPattern: [10, 4],
+                        );
+                      }
+                    }),
+                  ),
+                  SizedBox(
+                    height: 20,
+                  ),
                   TextField(
                     controller: goLiveController.titleController,
                     decoration: InputDecoration(
@@ -71,15 +79,18 @@ class GoLiveScreen extends StatelessWidget {
                     ),
                   )
                 ],
-              )),
-          SizedBox(
-              width: 200,
-              child: ElevatedButton(
-                  onPressed: () {
-                    goLiveController.goLiveStream(context);
-                  },
-                  child: Text("Go Live")))
-        ],
+              ),
+              Spacer(),
+              SizedBox(
+                  width: 200,
+                  child: ElevatedButton(
+                      onPressed: () {
+                        goLiveController.goLiveStream(context);
+                      },
+                      child: Text("Go Live")))
+            ],
+          ),
+        ),
       ),
     ));
   }

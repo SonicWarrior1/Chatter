@@ -40,7 +40,7 @@ class home extends StatelessWidget {
           body: IndexedStack(
             index: homeController.pageindex.value,
             // alignment: Alignment.center,
-            children: [FeedCreen(), GoLiveScreen(), Text("c")],
+            children: [FeedScreen(), GoLiveScreen(), Text("c")],
           ),
           bottomNavigationBar: BottomNavigationBar(
               onTap: homeController.setPage,

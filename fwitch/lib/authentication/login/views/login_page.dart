@@ -2,7 +2,6 @@
 
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/controller/login_controller.dart';
-import 'package:fwitch/shared_prefs.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
@@ -18,110 +17,127 @@ class LoginPage extends StatelessWidget {
           title: Text("Login"),
         ),
         body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 5),
+          padding: const EdgeInsets.symmetric(horizontal: 10),
           child: Form(
             key: loginController.formkey,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                TextFormField(
-                  controller: loginController.loginEmail,
-                  decoration: InputDecoration(
-                    label: Text("Email"),
-                  ),
-                  validator: (value) {
-                    if (RegExp(
-                            r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
-                        .hasMatch(value!)) {
-                      return null;
-                    } else {
-                      return "Please enter valid email";
-                    }
-                  },
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-                SizedBox(
-                  height: 20,
-                ),
-                TextFormField(
-                  controller: loginController.loginPassword,
-                  decoration: InputDecoration(
-                    label: Text("Password"),
-                  ),
-                  validator: (value) {
-                    if (value == null || value.isEmpty) {
-                      return 'Please enter your password.'.tr;
-                    }
-                    return null;
-                  },
-                  obscureText: true,
-                  autovalidateMode: AutovalidateMode.onUserInteraction,
-                ),
-                loginController.isLoggingIn.isTrue
-                    ? Center(
-                        child: CircularProgressIndicator(),
-                      )
-                    : Column(
-                        children: [
-                          SizedBox(
-                            width: 250,
-                            child: ElevatedButton(
-                              style: ButtonStyle(
-                                  backgroundColor: MaterialStateProperty.all(
-                                      Theme.of(context)
-                                          .colorScheme
-                                          .onSecondary),
-                                  shape: MaterialStateProperty.all<
-                                          RoundedRectangleBorder>(
-                                      RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(18.0),
-                                  ))),
-                              onPressed: () {
-                                loginController.googleLogin();
-                              },
-                              child: Text(
-                                "Google Login",
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .labelLarge!
-                                    .copyWith(color: Colors.black),
-                              ),
-                            ),
-                          ),
-                          Padding(
-                            padding: EdgeInsets.only(
-                                bottom:
-                                    MediaQuery.of(context).viewInsets.bottom),
-                            child: SizedBox(
-                              width: 250,
-                              child: ElevatedButton(
-                                style: ButtonStyle(
-                                    backgroundColor: MaterialStateProperty.all(
-                                        Theme.of(context)
-                                            .colorScheme
-                                            .onSecondary),
-                                    shape: MaterialStateProperty.all<
-                                            RoundedRectangleBorder>(
-                                        RoundedRectangleBorder(
-                                      borderRadius: BorderRadius.circular(18.0),
-                                    ))),
-                                onPressed: () {
-                                  if (loginController.formkey.currentState!
-                                      .validate()) loginController.loginUser(context);
-                                },
-                                child: Text(
-                                  "Login",
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .labelLarge!
-                                      .copyWith(color: Colors.black),
-                                ),
-                              ),
-                            ),
-                          )
-                        ],
+            child: Center(
+              child: Container(
+                constraints: BoxConstraints(maxWidth: 600),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    TextFormField(
+                      controller: loginController.loginEmail,
+                      decoration: InputDecoration(
+                        label: Text("Email"),
                       ),
-              ],
+                      validator: (value) {
+                        if (RegExp(
+                                r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            .hasMatch(value!)) {
+                          return null;
+                        } else {
+                          return "Please enter valid email";
+                        }
+                      },
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    SizedBox(
+                      height: 20,
+                    ),
+                    TextFormField(
+                      controller: loginController.loginPassword,
+                      decoration: InputDecoration(
+                        label: Text("Password"),
+                      ),
+                      onFieldSubmitted: (value) {
+                        if (loginController.formkey.currentState!.validate())
+                          loginController.loginUser(context);
+                      },
+                      validator: (value) {
+                        if (value == null || value.isEmpty) {
+                          return 'Please enter your password.'.tr;
+                        }
+                        return null;
+                      },
+                      obscureText: true,
+                      autovalidateMode: AutovalidateMode.onUserInteraction,
+                    ),
+                    loginController.isLoggingIn.isTrue
+                        ? Center(
+                            child: CircularProgressIndicator(),
+                          )
+                        : Column(
+                            children: [
+                              // SizedBox(
+                              //   width: 250,
+                              //   child: ElevatedButton(
+                              //     style: ButtonStyle(
+                              //         backgroundColor:
+                              //             MaterialStateProperty.all(
+                              //                 Theme.of(context)
+                              //                     .colorScheme
+                              //                     .onSecondary),
+                              //         shape: MaterialStateProperty.all<
+                              //                 RoundedRectangleBorder>(
+                              //             RoundedRectangleBorder(
+                              //           borderRadius:
+                              //               BorderRadius.circular(18.0),
+                              //         ))),
+                              //     onPressed: () {
+                              //       loginController.googleLogin();
+                              //     },
+                              //     child: Text(
+                              //       "Google Login",
+                              //       style: Theme.of(context)
+                              //           .textTheme
+                              //           .labelLarge!
+                              //           .copyWith(color: Colors.black),
+                              //     ),
+                              //   ),
+                              // ),
+                              Padding(
+                                padding: EdgeInsets.only(
+                                  bottom:
+                                      MediaQuery.of(context).viewInsets.bottom,
+                                  top: 20,
+                                ),
+                                child: SizedBox(
+                                  width: 200,
+                                  height: 40,
+                                  child: ElevatedButton(
+                                    style: ButtonStyle(
+                                        backgroundColor:
+                                            MaterialStateProperty.all(
+                                                Theme.of(context)
+                                                    .colorScheme
+                                                    .onSecondary),
+                                        shape: MaterialStateProperty.all<
+                                                RoundedRectangleBorder>(
+                                            RoundedRectangleBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(18.0),
+                                        ))),
+                                    onPressed: () {
+                                      if (loginController.formkey.currentState!
+                                          .validate())
+                                        loginController.loginUser(context);
+                                    },
+                                    child: Text(
+                                      "Login",
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .labelLarge!
+                                          .copyWith(color: Colors.black),
+                                    ),
+                                  ),
+                                ),
+                              )
+                            ],
+                          ),
+                  ],
+                ),
+              ),
             ),
           ),
         ),

@@ -19,13 +19,12 @@ class BroadcastScreen extends StatefulWidget {
 }
 
 class _BroadcastScreenState extends State<BroadcastScreen> {
-  BroadcastController broadcastController = BroadcastController();
+  BroadcastController broadcastController = Get.put(BroadcastController());
   @override
   void initState() {
-    // TODO: implement initState
     super.initState();
-    broadcastController.initEngine(
-        widget.isBroadcaster, widget.channelId, context);
+    broadcastController.initEngine(widget.isBroadcaster , widget.channelId, context);
+    
   }
 
   @override
@@ -36,44 +35,120 @@ class _BroadcastScreenState extends State<BroadcastScreen> {
         broadcastController.leaveChannel(widget.channelId, context);
         return Future.value(true);
       },
-      child: Scaffold(
-        body: Padding(
-          padding: EdgeInsets.all(8),
-          child: Column(
-            children: [
-              broadcastController.renderVideo(user, context, widget.channelId),
-              if ("${user.user.uid}${user.user.username}" == widget.channelId)
-                Column(
-                  mainAxisSize: MainAxisSize.max,
-                  mainAxisAlignment: MainAxisAlignment.start,
-                  children: [
-                    InkWell(
-                      onTap: () {
-                        broadcastController.switchCamera();
-                      },
-                      child: Icon(Icons.switch_camera),
+      child: Scaffold(body: LayoutBuilder(builder: (context, constraints) {
+        if (MediaQuery.of(context).size.width >= 600) {
+          return Row(children: [
+            Expanded(
+              child: Column(children: [
+                broadcastController.renderVideo(
+                    user, context, widget.channelId),
+                if ("${user.user.uid}${user.user.username}" == widget.channelId)
+                  SizedBox(
+                    width: double.infinity,
+                    child: Expanded(
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                        children: [
+                          InkWell(
+                            onTap: () {
+                              broadcastController.switchCamera();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.switch_camera),
+                                Text("Swicth Camera")
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              broadcastController.onToggleMute();
+                            },
+                            child: Column(
+                              children: [
+                                Obx(() {
+                                  return Icon(broadcastController.isMuted.value
+                                      ? Icons.volume_up_sharp
+                                      : Icons.volume_mute);
+                                }),
+                                Text("Mute/Unmute")
+                              ],
+                            ),
+                          ),
+                          InkWell(
+                            onTap: () {
+                              // broadcastController.switchCamera();
+                            },
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(Icons.screen_share),
+                                Text("Screen Share")
+                              ],
+                            ),
+                          ),
+                        ],
+                      ),
                     ),
-                    InkWell(
-                      onTap: () {
-                        broadcastController.onToggleMute();
-                      },
-                      child: Obx(() {
-                        return Icon(broadcastController.isMuted.value
-                            ? Icons.volume_up_sharp
-                            : Icons.volume_mute);
-                      }),
-                    ),
-                  ],
-                ),
-              Expanded(
-                child: Chat(
-                  channelId: widget.channelId,
-                ),
-              )
-            ],
-          ),
-        ),
-      ),
+                  )
+              ]),
+            ),
+            Chat(
+              channelId: widget.channelId,
+            )
+          ]);
+        } else {
+          return Padding(
+            padding: EdgeInsets.all(8),
+            child: Column(
+              children: [
+                broadcastController.renderVideo(
+                    user, context, widget.channelId),
+                if ("${user.user.uid}${user.user.username}" == widget.channelId)
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      InkWell(
+                        onTap: () {
+                          broadcastController.switchCamera();
+                        },
+                        child: Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(Icons.switch_camera),
+                            Text("Swicth Camera")
+                          ],
+                        ),
+                      ),
+                      InkWell(
+                        onTap: () {
+                          broadcastController.onToggleMute();
+                        },
+                        child: Column(
+                          children: [
+                            Obx(() {
+                              return Icon(broadcastController.isMuted.value
+                                  ? Icons.volume_up_sharp
+                                  : Icons.volume_mute);
+                            }),
+                            Text("Mute/Unmute")
+                          ],
+                        ),
+                      ),
+                    ],
+                  ),
+                Expanded(
+                  child: Chat(
+                    channelId: widget.channelId,
+                  ),
+                )
+              ],
+            ),
+          );
+        }
+      })),
     );
   }
 }

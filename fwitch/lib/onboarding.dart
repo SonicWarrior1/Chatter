@@ -44,6 +44,9 @@ class onBoarding extends StatelessWidget {
               ),
             ),
             SizedBox(
+              height: 10,
+            ),
+            SizedBox(
               width: 250,
               child: ElevatedButton(
                 style: ButtonStyle(

@@ -1,6 +1,6 @@
 import 'package:flutter/cupertino.dart';
 import 'package:fwitch/resources/authMethods.dart';
-import 'package:fwitch/shared_prefs.dart';
+
 import 'package:get/get.dart';
 
 class SignUpController extends GetxController {
@@ -12,9 +12,13 @@ class SignUpController extends GetxController {
   TextEditingController nameController = TextEditingController();
 
   void signup(BuildContext context) async {
-    bool res = await _authMethods.signupUser(emailController.text,
-        usernameController.text, passworController.text, nameController.text,context);
-    SharedPrefs.setUsername(usernameController.text);
+    bool res = await _authMethods.signupUser(
+        emailController.text,
+        usernameController.text,
+        passworController.text,
+        nameController.text,
+        context);
+
     if (res) {
       Get.offAllNamed('/home');
     }

@@ -2,6 +2,7 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/views/login_page.dart';
 import 'package:fwitch/authentication/signup/views/signup_page.dart';
@@ -10,7 +11,7 @@ import 'package:fwitch/home/views/home.dart';
 import 'package:fwitch/onboarding.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/authMethods.dart';
-import 'package:fwitch/shared_prefs.dart';
+
 import 'package:fwitch/theme.dart';
 import 'package:get/get.dart';
 import 'package:get/get_connect/http/src/utils/utils.dart';
@@ -19,7 +20,19 @@ import 'models/user.dart' as model;
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  if (kIsWeb) {
+    await Firebase.initializeApp(
+        options: FirebaseOptions(
+            apiKey: "AIzaSyDfacIaxinbnuA2KDcvpXOzGEeQ89koJ0w",
+            authDomain: "fwitch-8e933.firebaseapp.com",
+            projectId: "fwitch-8e933",
+            storageBucket: "fwitch-8e933.appspot.com",
+            messagingSenderId: "458236514278",
+            appId: "1:458236514278:web:c6073e600dac9c7414d027"));
+  }else{
+  await Firebase.initializeApp(); 
+  }
+
   runApp(MultiProvider(
       providers: [ChangeNotifierProvider(create: (_) => UserProvider())],
       child: const MyApp()));

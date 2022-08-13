@@ -5,7 +5,6 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:fwitch/config/app-Id.dart';
 import 'package:fwitch/providers/user_provider.dart';
-import 'package:fwitch/resources/authMethods.dart';
 import 'package:fwitch/resources/firestore_methods.dart';
 import 'package:get/get.dart';
 import 'package:permission_handler/permission_handler.dart';
@@ -15,7 +14,13 @@ import 'package:agora_rtc_engine/rtc_remote_view.dart' as RtcRemoteView;
 import 'package:http/http.dart' as http;
 
 class BroadcastController extends GetxController {
-  String baseUrl = "https://fwitch123.herokuapp.com/";
+  @override
+  void onInit() {
+    // TODO: implement onInit
+    super.onInit();
+  }
+
+  String baseUrl = "https://fwitch123.herokuapp.com";
   RxString token = "".obs;
   Future<void> getToken(String channelId, BuildContext context) async {
     final res = await http.get(Uri.parse(baseUrl +
@@ -32,53 +37,57 @@ class BroadcastController extends GetxController {
     }
   }
 
-  late final RtcEngine _engine;
+  RtcEngine? _engine;
   RxList remoteUid = [].obs;
   RxBool switchcamera = true.obs;
+
   RxBool isMuted = false.obs;
   TextEditingController chatController = TextEditingController();
-  initEngine(bool isBroadcaster, String channelId, BuildContext context) async {
+
+  Future<void> initEngine(
+      bool isBroadcaster, String channelId, BuildContext context) async {
     _engine = await RtcEngine.createWithContext(RtcEngineContext(appId));
+    await _engine?.enableVideo();
+    await _engine?.startPreview();
+    await _engine?.setChannelProfile(ChannelProfile.LiveBroadcasting);
     addListeners(channelId, context);
-    await _engine.enableVideo();
-    await _engine.startPreview();
-    await _engine.setChannelProfile(ChannelProfile.LiveBroadcasting);
-    _engine.setClientRole(
-        isBroadcaster ? ClientRole.Broadcaster : ClientRole.Audience);
-    // ignore: use_build_context_synchronously
-    joinChaneel(context, channelId);
+    isBroadcaster
+        ? _engine?.setClientRole(ClientRole.Broadcaster)
+        : _engine?.setClientRole(ClientRole.Audience);
+    joinChannel(context, channelId);
   }
 
   addListeners(String channelId, BuildContext context) {
-    _engine.setEventHandler(RtcEngineEventHandler(
-      joinChannelSuccess: ((channel, uid, elapsed) {
+    _engine?.setEventHandler(RtcEngineEventHandler(
+      joinChannelSuccess: (channel, uid, elapsed) {
         debugPrint('joinChannelSuccess $channel $uid $elapsed');
-      }),
+      },
       userJoined: (uid, elapsed) {
         debugPrint("userJoined $uid $elapsed");
         remoteUid.add(uid);
       },
-      userOffline: ((uid, reason) {
+      userOffline: (uid, reason) {
         debugPrint('userOffline $uid $reason');
         remoteUid.removeWhere((element) => element == uid);
-      }),
-      leaveChannel: ((stats) {
+      },
+      leaveChannel: (stats) {
         debugPrint("leaveChannel $stats");
         remoteUid.clear();
-      }),
+      },
       tokenPrivilegeWillExpire: (token) async {
         await getToken(channelId, context);
-        await _engine.renewToken(token);
+        await _engine?.renewToken(token);
       },
     ));
   }
 
-  void joinChaneel(BuildContext context, String channelId) async {
+  void joinChannel(BuildContext context, String channelId) async {
     await getToken(channelId, context);
     if (defaultTargetPlatform == TargetPlatform.android) {
       await [Permission.microphone, Permission.camera].request();
-      await _engine.joinChannelWithUserAccount(token.value, "testing123",
-          Provider.of<UserProvider>(context, listen: false).user.uid);
+      await _engine?.joinChannel(token.value, channelId, "", 0);
+      // await _engine?.joinChannelWithUserAccount(token.value, channelId,
+      //     Provider.of<UserProvider>(context, listen: false).user.uid);
     }
   }
 
@@ -93,8 +102,8 @@ class BroadcastController extends GetxController {
             : remoteUid.isNotEmpty
                 ? kIsWeb
                     ? RtcRemoteView.SurfaceView(
-                        uid: remoteUid[0],
                         channelId: channelId,
+                        uid: remoteUid[0],
                       )
                     : RtcRemoteView.TextureView(
                         uid: remoteUid[0],
@@ -105,7 +114,7 @@ class BroadcastController extends GetxController {
 
   void switchCamera() {
     _engine
-        .switchCamera()
+        ?.switchCamera()
         .then((value) => {switchcamera.value = !switchcamera.value})
         .catchError((e) {
       debugPrint('switchCamera $e');
@@ -114,11 +123,11 @@ class BroadcastController extends GetxController {
 
   void onToggleMute() async {
     isMuted.value = !isMuted.value;
-    await _engine.muteLocalAudioStream(isMuted.value);
+    await _engine?.muteLocalAudioStream(isMuted.value);
   }
 
   leaveChannel(String channelId, BuildContext context) async {
-    await _engine.leaveChannel();
+    await _engine?.leaveChannel();
     if ("${Provider.of<UserProvider>(context, listen: false).user.uid}${Provider.of<UserProvider>(context, listen: false).user.username}" ==
         channelId) {
       await FirestoreMethods().endLiveStream(channelId);
