@@ -27,7 +27,7 @@ class AuthMethods {
       UserCredential creds = await _auth.createUserWithEmailAndPassword(
           email: email, password: password);
       if (creds.user != null) {
-        model.User user = model.User(
+        model.MyUser user = model.MyUser(
             username: username.trim(),
             email: email.trim(),
             uid: creds.user!.uid,
@@ -46,11 +46,6 @@ class AuthMethods {
     }
     return res;
   }
-
-  // getUserDetails() {
-  //   var currentUser = _auth.currentUser;
-  //   uid.value = currentUser!.uid;
-  // }
 
   googleSingin() async {
     User? user;
@@ -95,7 +90,7 @@ class AuthMethods {
           email: email, password: password);
       if (creds.user != null) {
         Provider.of<UserProvider>(context, listen: false)
-            .setUser(model.User.fromMap(
+            .setUser(model.MyUser.fromMap(
           await getCurrentUser(creds.user!.uid) ?? {},
         ));
       }

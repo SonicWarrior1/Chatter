@@ -6,15 +6,15 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/views/login_page.dart';
 import 'package:fwitch/authentication/signup/views/signup_page.dart';
-import 'package:fwitch/broadcast/views/broadcast_screen.dart';
 import 'package:fwitch/home/views/home.dart';
+import 'package:fwitch/home/views/search.dart';
 import 'package:fwitch/onboarding.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/authMethods.dart';
 
 import 'package:fwitch/theme.dart';
 import 'package:get/get.dart';
-import 'package:get/get_connect/http/src/utils/utils.dart';
+
 import 'package:provider/provider.dart';
 import 'models/user.dart' as model;
 
@@ -29,8 +29,8 @@ void main() async {
             storageBucket: "fwitch-8e933.appspot.com",
             messagingSenderId: "458236514278",
             appId: "1:458236514278:web:c6073e600dac9c7414d027"));
-  }else{
-  await Firebase.initializeApp(); 
+  } else {
+    await Firebase.initializeApp();
   }
 
   runApp(MultiProvider(
@@ -47,7 +47,8 @@ class MyApp extends StatelessWidget {
         '/onBoarding': (context) => onBoarding(),
         '/login': (context) => LoginPage(),
         '/signup': (context) => SignupPage(),
-        '/home': (context) => home(),
+        '/home': (context) => HomeScreen(),
+        '/search': (context) => SearchScreen()
         // '/braoadcast':(context)=>BroadcastScreen()
       },
       title: "Fwitch",
@@ -59,7 +60,7 @@ class MyApp extends StatelessWidget {
             .then((value) {
           if (value != null) {
             Provider.of<UserProvider>(context, listen: false).setUser(
-              model.User.fromMap(value),
+              model.MyUser.fromMap(value),
             );
           }
           return value;
@@ -71,7 +72,7 @@ class MyApp extends StatelessWidget {
             );
           }
           if (snapshot.hasData) {
-            return home();
+            return HomeScreen();
           }
           return onBoarding();
         },
