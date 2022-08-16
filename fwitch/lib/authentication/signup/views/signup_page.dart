@@ -20,7 +20,7 @@ class SignupPage extends StatelessWidget {
             key: signupController.formKey,
             child: Center(
               child: Container(
-                constraints: BoxConstraints(maxWidth: 600),
+                constraints: const BoxConstraints(maxWidth: 600),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
                   children: [

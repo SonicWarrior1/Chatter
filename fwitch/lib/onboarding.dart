@@ -1,11 +1,14 @@
 // ignore_for_file: camel_case_types
 
 import 'package:flutter/material.dart';
+import 'package:fwitch/authentication/login/controller/login_controller.dart';
+import 'package:fwitch/authentication/signup/controller/signup_controller.dart';
 import 'package:get/get.dart';
 
 class onBoarding extends StatelessWidget {
-  const onBoarding({Key? key}) : super(key: key);
-
+  onBoarding({Key? key}) : super(key: key);
+  SignUpController signUpController = Get.put(SignUpController());
+  LoginController loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -15,7 +18,7 @@ class onBoarding extends StatelessWidget {
           // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
-              "Welcome to Fwitch",
+              "Welcome to Chatter",
               style: Theme.of(context).textTheme.displaySmall,
             ),
             const SizedBox(
@@ -32,6 +35,7 @@ class onBoarding extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ))),
                 onPressed: () {
+                  loginController.clearControllers();
                   Get.toNamed('/login');
                 },
                 child: Text(
@@ -43,7 +47,7 @@ class onBoarding extends StatelessWidget {
                 ),
               ),
             ),
-            SizedBox(
+            const SizedBox(
               height: 10,
             ),
             SizedBox(
@@ -57,6 +61,7 @@ class onBoarding extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ))),
                 onPressed: () {
+                  signUpController.clear();
                   Get.toNamed('/signup');
                 },
                 child: Text(

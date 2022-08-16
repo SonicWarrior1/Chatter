@@ -6,6 +6,7 @@ import 'package:fwitch/conversation/views/conversation_screen.dart';
 import 'package:fwitch/models/user.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/firestore_methods.dart';
+import 'package:fwitch/toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
@@ -50,10 +51,14 @@ class SearchController extends GetxController {
         "chatRoomId": chatRoomId
       };
       firebaseMethods.chat(chatRoomId, context, chatRoomMap);
-      Navigator.pushReplacement(context,
-          MaterialPageRoute(builder: (context) => const ConversationScreen()));
+      Navigator.pushReplacement(
+          context,
+          MaterialPageRoute(
+              builder: (context) => ConversationScreen(
+                    chatRoomId: chatRoomId,
+                  )));
     } else {
-      Get.snackbar("", "You cannot send message to Yourself");
+      Toast.yoToast("", "You cannot send message to Yourself", context);
     }
   }
 }

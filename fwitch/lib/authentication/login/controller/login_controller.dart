@@ -1,6 +1,6 @@
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fwitch/resources/authMethods.dart';
+import 'package:fwitch/toast.dart';
 import 'package:get/get.dart';
 
 class LoginController extends GetxController {
@@ -13,19 +13,24 @@ class LoginController extends GetxController {
     isLoggingIn.value = true;
     bool res = await _authMethods.loginUser(
         loginEmail.text, loginPassword.text, context);
-
     if (res) {
-      isLoggingIn.value = false;
+      Toast.yoToast("Danmm", "Login Sucess", context);
       Get.offAllNamed('/home');
+      isLoggingIn.value = false;
+      clearControllers();
     }
   }
 
-  googleLogin() async {
-    isLoggingIn.value = true;
-    User? user = await _authMethods.googleSingin();
-    isLoggingIn.value = false;
-    if (user != null) {
-      Get.offAllNamed('/home');
-    }
+  clearControllers() {
+    loginEmail.clear();
+    loginPassword.clear();
   }
+  // googleLogin() async {
+  //   isLoggingIn.value = true;
+  //   User? user = await _authMethods.googleSingin();
+  //   isLoggingIn.value = false;
+  //   if (user != null) {
+  //     Get.offAllNamed('/home');
+  //   }
+  // }
 }

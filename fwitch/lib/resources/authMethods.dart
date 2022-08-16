@@ -3,15 +3,13 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fwitch/models/user.dart' as model;
 import 'package:fwitch/providers/user_provider.dart';
+import 'package:fwitch/toast.dart';
 import 'package:get/get.dart';
-import 'package:google_sign_in/google_sign_in.dart';
 import 'package:provider/provider.dart';
 
 class AuthMethods {
   final _userRef = FirebaseFirestore.instance.collection('users');
   final _auth = FirebaseAuth.instance;
-  // RxString uid = "".obs;
-  // RxString username = "".obs;
   Future<Map<String, dynamic>?> getCurrentUser(String? uid) async {
     if (uid != null) {
       final snap = await _userRef.doc(uid).get();
@@ -35,52 +33,48 @@ class AuthMethods {
         await _userRef.doc(creds.user!.uid).set(user.toMap());
         Provider.of<UserProvider>(context, listen: false).setUser(user);
         res = true;
-        Get.snackbar("Damn", "Signup Succesfull");
+        Toast.yoToast("Danm", "SignUp Succesful", context);
       }
     } on FirebaseAuthException catch (e) {
-      Get.snackbar(
-        "Damn",
-        "${e.message}",
-      );
-      print(e.message!);
+      Toast.yoToast("", e.message.toString(), context);
     }
     return res;
   }
 
-  googleSingin() async {
-    User? user;
-    final GoogleSignIn googleSignIn = GoogleSignIn();
+  // googleSingin() async {
+  //   User? user;
+  //   final GoogleSignIn googleSignIn = GoogleSignIn();
 
-    final GoogleSignInAccount? googleSignInAccount =
-        await googleSignIn.signIn();
+  //   final GoogleSignInAccount? googleSignInAccount =
+  //       await googleSignIn.signIn();
 
-    if (googleSignInAccount != null) {
-      final GoogleSignInAuthentication googleSignInAuthentication =
-          await googleSignInAccount.authentication;
+  //   if (googleSignInAccount != null) {
+  //     final GoogleSignInAuthentication googleSignInAuthentication =
+  //         await googleSignInAccount.authentication;
 
-      final AuthCredential credential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
+  //     final AuthCredential credential = GoogleAuthProvider.credential(
+  //       accessToken: googleSignInAuthentication.accessToken,
+  //       idToken: googleSignInAuthentication.idToken,
+  //     );
 
-      try {
-        final UserCredential userCredential =
-            await _auth.signInWithCredential(credential);
+  //     try {
+  //       final UserCredential userCredential =
+  //           await _auth.signInWithCredential(credential);
 
-        user = userCredential.user;
-      } on FirebaseAuthException catch (e) {
-        if (e.code == 'account-exists-with-different-credential') {
-          // handle the error here
-        } else if (e.code == 'invalid-credential') {
-          // handle the error here
-        }
-      } catch (e) {
-        // handle the error here
-      }
-    }
+  //       user = userCredential.user;
+  //     } on FirebaseAuthException catch (e) {
+  //       if (e.code == 'account-exists-with-different-credential') {
+  //         // handle the error here
+  //       } else if (e.code == 'invalid-credential') {
+  //         // handle the error here
+  //       }
+  //     } catch (e) {
+  //       // handle the error here
+  //     }
+  //   }
 
-    return user;
-  }
+  //   return user;
+  // }
 
   Future<bool> loginUser(
       String email, String password, BuildContext context) async {
@@ -96,10 +90,7 @@ class AuthMethods {
       }
       res = true;
     } on FirebaseAuthException catch (e) {
-      Get.snackbar(
-        "Damn",
-        "${e.message}",
-      );
+      Toast.yoToast("", e.message.toString(), context);
     }
     return res;
   }

@@ -3,9 +3,8 @@ import 'package:flutter/cupertino.dart';
 import 'package:fwitch/models/user.dart';
 
 import 'package:fwitch/providers/user_provider.dart';
-import 'package:get/get.dart';
+import 'package:fwitch/toast.dart';
 import 'package:provider/provider.dart';
-import 'package:uuid/uuid.dart';
 
 class FirestoreMethods {
   /// To get only one instance of a class
@@ -21,7 +20,7 @@ class FirestoreMethods {
       // String commentId = Uuid().v1();
       await _firestore.collection('chatRoom').doc(chatRoomId).set(chatRoomMap);
     } on FirebaseException catch (e) {
-      Get.snackbar("", e.message!);
+      Toast.yoToast("", e.message.toString(), context);
     }
   }
 
@@ -33,4 +32,35 @@ class FirestoreMethods {
 
     return result.docs.map((e) => MyUser.fromMap(e.data())).toList();
   }
+
+  sendConversation(String chatRoomId, messageMap) {
+    try {
+      _firestore
+          .collection('chatRoom')
+          .doc(chatRoomId)
+          .collection('chats')
+          .add(messageMap);
+    } catch (e) {
+      print(e.toString());
+    }
+  }
+
+  // getConversation(String chatRoomId) {
+  //   try {
+  //     _firestore
+  //         .collection('chatRoom')
+  //         .doc(chatRoomId)
+  //         .collection('chats')
+  //         .snapshots();
+  //   } catch (e) {
+  //     print(e.toString());
+  //   }
+  // }
+
+  // getChatRooms(String username) {
+  //   return _firestore
+  //       .collection('chatRoom')
+  //       .where('users', arrayContains: username)
+  //       .snapshots();
+  // }
 }

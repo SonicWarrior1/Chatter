@@ -21,6 +21,14 @@ class SignUpController extends GetxController {
 
     if (res) {
       Get.offAllNamed('/home');
+      clear();
     }
+  }
+
+  clear() {
+    emailController.clear();
+    passworController.clear();
+    usernameController.clear();
+    nameController.clear();
   }
 }
