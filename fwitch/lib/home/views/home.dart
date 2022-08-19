@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/conversation/views/conversation_screen.dart';
-
+import 'package:url_launcher/url_launcher.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/authMethods.dart';
 import 'package:fwitch/home/controller/home_controller.dart';
@@ -17,23 +17,113 @@ class HomeScreen extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: const Text("Chatter"), actions: [
-        IconButton(
-          icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
-          onPressed: () {
-            Get.changeThemeMode(
-                Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-          },
+      drawer: Drawer(
+        child: Padding(
+          padding: const EdgeInsets.only(top: 20),
+          child: ListView(
+            children: [
+              DrawerHeader(
+                  padding: const EdgeInsets.all(0),
+                  child: UserAccountsDrawerHeader(
+                    decoration: BoxDecoration(
+                        color: Theme.of(context).colorScheme.background),
+                    currentAccountPicture: Padding(
+                      padding: const EdgeInsets.only(left: 10, bottom: 10),
+                      child: CircleAvatar(
+                        child: Text(
+                            Provider.of<UserProvider>(context, listen: false)
+                                .user
+                                .username
+                                .toString()
+                                .substring(0, 1)),
+                      ),
+                    ),
+                    accountName: Padding(
+                      padding: const EdgeInsets.only(left: 10, top: 15),
+                      child: Text(
+                        Provider.of<UserProvider>(context, listen: false)
+                            .user
+                            .username,
+                        style: Theme.of(context).textTheme.titleLarge,
+                      ),
+                    ),
+                    accountEmail: Padding(
+                      padding: const EdgeInsets.only(left: 10),
+                      child: Text(
+                        Provider.of<UserProvider>(context, listen: false)
+                            .user
+                            .email,
+                        style: Theme.of(context).textTheme.titleSmall,
+                      ),
+                    ),
+                  )),
+              InkWell(
+                onTap: () {
+                  Get.offAllNamed('/home');
+                },
+                child: const ListTile(
+                  leading: Icon(Icons.home),
+                  title: Text("Home"),
+                ),
+              ),
+              Obx(() {
+                return ListTile(
+                    title: const Text("Dark Mode"),
+                    leading: Icon(
+                        Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
+                    trailing: Switch(
+                      value: homeController.darkTheme.value,
+                      onChanged: (value) {
+                        Get.changeThemeMode(
+                            Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+                        homeController.darkTheme.value = !Get.isDarkMode;
+                      },
+                    ));
+              }),
+              InkWell(
+                child: const ListTile(
+                  title: Text("FeedBack"),
+                  leading: Icon(Icons.feedback),
+                ),
+                onTap: () {
+                  final Uri emailLaunchUri =
+                      Uri(scheme: "mailto", path: "harjot802@gmail.com");
+                  launchUrl(emailLaunchUri);
+                },
+              ),
+              InkWell(
+                onTap: () {
+                  showAlertDialog(context);
+                },
+                child: const ListTile(
+                  leading: Icon(Icons.logout),
+                  title: Text("Sign Out"),
+                ),
+              )
+            ],
+          ),
         ),
-        Tooltip(
-          message: "Sign Out",
-          child: IconButton(
-              onPressed: () {
-                showAlertDialog(context);
-              },
-              icon: const Icon(Icons.logout)),
-        )
-      ]),
+      ),
+      appBar: AppBar(
+        title: const Text("Chatter"),
+        //  actions: [
+        //   IconButton(
+        //     icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
+        //     onPressed: () {
+        //       Get.changeThemeMode(
+        //           Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+        //     },
+        //   ),
+        //   Tooltip(
+        //     message: "Sign Out",
+        //     child: IconButton(
+        //         onPressed: () {
+        //           showAlertDialog(context);
+        //         },
+        //         icon: const Icon(Icons.logout)),
+        //   )
+        // ]
+      ),
       body: StreamBuilder<dynamic>(
         stream: FirebaseFirestore.instance
             .collection('chatRoom')
@@ -43,9 +133,12 @@ class HomeScreen extends StatelessWidget {
                   .user
                   .username,
             )
+            // .orderBy('updatedAt')
             .snapshots(),
         builder: (context, friendSnapshot) {
-          if (friendSnapshot.data!.docs.isEmpty) {
+          if (friendSnapshot.connectionState == ConnectionState.waiting) {
+            return Container();
+          } else if (friendSnapshot.data.docs.isEmpty) {
             return const Center(
               child: Text("Start chatting by searching their username"),
             );
@@ -70,36 +163,45 @@ class HomeScreen extends StatelessWidget {
                               .toDate()
                               .toString())
                           .toLocal();
-                      if (friendSnapshot.connectionState ==
-                              ConnectionState.waiting ||
-                          chatSnapshot.connectionState ==
-                              ConnectionState.waiting) {
-                        return Center(
-                          child: Container(),
-                        );
-                      }
-                      return InkWell(
-                        onTap: () {
-                          Navigator.push(
-                              context,
-                              MaterialPageRoute(
-                                  builder: (context) => ConversationScreen(
-                                        chatRoomId: friendSnapshot
-                                            .data.docs[index]['chatRoomId'],
-                                      )));
-                        },
-                        child: Container(
-                          decoration: BoxDecoration(
-                              border: Border(
-                                  bottom: BorderSide(
-                                      color: Theme.of(context)
-                                          .colorScheme
-                                          .onPrimaryContainer))),
-                          child: ListTile(
-                            contentPadding: const EdgeInsets.symmetric(
-                                vertical: 10, horizontal: 15),
-                            leading: CircleAvatar(
-                              child: Text(friendSnapshot
+                      if (chatSnapshot.connectionState ==
+                          ConnectionState.waiting) {
+                        return Container();
+                      } else {
+                        return InkWell(
+                          onTap: () {
+                            Navigator.push(
+                                context,
+                                MaterialPageRoute(
+                                    builder: (context) => ConversationScreen(
+                                          chatRoomId: friendSnapshot
+                                              .data.docs[index]['chatRoomId'],
+                                        )));
+                          },
+                          child: Container(
+                            decoration: BoxDecoration(
+                                border: Border(
+                                    bottom: BorderSide(
+                                        color: Theme.of(context)
+                                            .colorScheme
+                                            .onPrimaryContainer))),
+                            child: ListTile(
+                              contentPadding: const EdgeInsets.symmetric(
+                                  vertical: 10, horizontal: 15),
+                              leading: CircleAvatar(
+                                child: Text(friendSnapshot
+                                    .data.docs[index]['chatRoomId']
+                                    .toString()
+                                    .replaceAll("_", "")
+                                    .replaceAll(
+                                        Provider.of<UserProvider>(context,
+                                                listen: false)
+                                            .user
+                                            .username,
+                                        "")
+                                    .substring(0, 1)
+                                    .toUpperCase()),
+                              ),
+                              title: Text(friendSnapshot
                                   .data.docs[index]['chatRoomId']
                                   .toString()
                                   .replaceAll("_", "")
@@ -108,32 +210,20 @@ class HomeScreen extends StatelessWidget {
                                               listen: false)
                                           .user
                                           .username,
-                                      "")
-                                  .substring(0, 1)
-                                  .toUpperCase()),
+                                      "")),
+                              subtitle: chatSnapshot.data.docs[
+                                              chatSnapshot.data.docs.length - 1]
+                                          ['isImage'] ==
+                                      true
+                                  ? const Text("Image")
+                                  : Text(chatSnapshot.data.docs[
+                                          chatSnapshot.data.docs.length - 1]
+                                      ['message']),
+                              trailing: Text("$time".substring(11, 16)),
                             ),
-                            title: Text(friendSnapshot
-                                .data.docs[index]['chatRoomId']
-                                .toString()
-                                .replaceAll("_", "")
-                                .replaceAll(
-                                    Provider.of<UserProvider>(context,
-                                            listen: false)
-                                        .user
-                                        .username,
-                                    "")),
-                            subtitle: chatSnapshot.data.docs[
-                                            chatSnapshot.data.docs.length - 1]
-                                        ['isImage'] ==
-                                    true
-                                ? const Text("Image")
-                                : Text(chatSnapshot.data
-                                        .docs[chatSnapshot.data.docs.length - 1]
-                                    ['message']),
-                            trailing: Text("$time".substring(11, 16)),
                           ),
-                        ),
-                      );
+                        );
+                      }
                     });
               },
             );

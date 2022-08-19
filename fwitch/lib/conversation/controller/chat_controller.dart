@@ -17,6 +17,7 @@ class ChatController extends GetxController {
   final firebaseMethods = FirestoreMethods.firestoreMethods;
   ScrollController scrollController = ScrollController();
   RxBool isImageLoading = false.obs;
+  RxBool isImageSent = false.obs;
   Rx<Uint8List> image = Uint8List.fromList([]).obs;
   Future<Uint8List?> pickImage() async {
     FilePickerResult? pickedImage =
@@ -32,8 +33,9 @@ class ChatController extends GetxController {
 
   sendImage(String chatRoomId, Uint8List file, BuildContext context) async {
     var uuid = const Uuid();
-    String url =
-        await storageMethods.uploadImageToStorage(chatRoomId, file, uuid.v4());
+    isImageSent.value = true;
+    String url = await storageMethods.uploadImageToStorage(
+        context, chatRoomId, file, uuid.v4());
 
     if (image.value.isNotEmpty) {
       Map<String, dynamic> messageMap = {
@@ -44,6 +46,7 @@ class ChatController extends GetxController {
         "createdAt": DateTime.now(),
         "isImage": true
       };
+
       firebaseMethods.sendConversation(chatRoomId, messageMap);
     }
   }

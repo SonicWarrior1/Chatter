@@ -47,6 +47,7 @@ class ConversationScreen extends StatelessWidget {
                             showModalBottomSheet(
                                 context: context,
                                 builder: (context) {
+                                  chatController.isImageSent.value = false;
                                   return Padding(
                                     padding: const EdgeInsets.symmetric(
                                         vertical: 20, horizontal: 10),
@@ -58,15 +59,26 @@ class ConversationScreen extends StatelessWidget {
                                           child: Image.memory(
                                               chatController.image.value),
                                         ),
-                                        ElevatedButton(
-                                            onPressed: () {
-                                              chatController.sendImage(
-                                                  chatRoomId,
-                                                  chatController.image.value,
-                                                  context);
-                                              // Navigator.pop(context);
-                                            },
-                                            child: const Text("Send"))
+                                        Obx(() {
+                                          if (chatController
+                                              .isImageSent.isTrue) {
+                                            return const Center(
+                                              child:
+                                                  CircularProgressIndicator(),
+                                            );
+                                          } else {
+                                            return ElevatedButton(
+                                                onPressed: () {
+                                                  chatController.sendImage(
+                                                      chatRoomId,
+                                                      chatController
+                                                          .image.value,
+                                                      context);
+                                                  // Navigator.pop(context);
+                                                },
+                                                child: const Text("Send"));
+                                          }
+                                        })
                                       ],
                                     ),
                                   );

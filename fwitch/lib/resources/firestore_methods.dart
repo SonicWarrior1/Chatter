@@ -27,7 +27,7 @@ class FirestoreMethods {
   Future<List<MyUser>> getUserByUsername(String username) async {
     final result = await _firestore
         .collection('users')
-        .where('username', isEqualTo: username)
+        .where('username', isGreaterThanOrEqualTo: username)
         .get();
 
     return result.docs.map((e) => MyUser.fromMap(e.data())).toList();
@@ -40,6 +40,10 @@ class FirestoreMethods {
           .doc(chatRoomId)
           .collection('chats')
           .add(messageMap);
+      _firestore
+          .collection('chatRoom')
+          .doc(chatRoomId)
+          .update({'updatedAt': DateTime.now()});
     } catch (e) {
       print(e.toString());
     }

@@ -1,12 +1,9 @@
-
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:flutter/cupertino.dart';
+import 'package:fwitch/providers/user_provider.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class HomeController extends GetxController {
-  RxString username = "".obs;
-
-
-  RxInt pageindex = 0.obs;
-  setPage(int page) {
-    pageindex.value = page;
-  }
+  RxBool darkTheme = Get.isDarkMode.obs;
 }

@@ -48,7 +48,8 @@ class SearchController extends GetxController {
       ];
       Map<String, dynamic> chatRoomMap = {
         "users": users,
-        "chatRoomId": chatRoomId
+        "chatRoomId": chatRoomId,
+        "updatedAt": DateTime.now()
       };
       firebaseMethods.chat(chatRoomId, context, chatRoomMap);
       Navigator.pushReplacement(
