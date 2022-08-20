@@ -10,8 +10,9 @@ class SignUpController extends GetxController {
   TextEditingController passworController = TextEditingController();
   TextEditingController usernameController = TextEditingController();
   TextEditingController nameController = TextEditingController();
-
+  RxBool isSigningUp = false.obs;
   void signup(BuildContext context) async {
+    isSigningUp.value = true;
     bool res = await _authMethods.signupUser(
         emailController.text,
         usernameController.text,
@@ -21,6 +22,7 @@ class SignUpController extends GetxController {
 
     if (res) {
       Get.offAllNamed('/home');
+      isSigningUp.value = false;
       clear();
     }
   }

@@ -107,14 +107,15 @@ class HomeScreen extends StatelessWidget {
       ),
       appBar: AppBar(
         title: const Text("Chatter"),
- 
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('chatRoom')
             .where(
               'users',
-              arrayContains: "Raxstar",
+              arrayContains: Provider.of<UserProvider>(context, listen: false)
+                  .user
+                  .username,
             )
             .orderBy('updatedAt', descending: true)
             .snapshots(),
