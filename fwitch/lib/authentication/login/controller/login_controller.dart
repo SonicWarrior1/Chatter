@@ -25,6 +25,25 @@ class LoginController extends GetxController {
     loginEmail.clear();
     loginPassword.clear();
   }
+
+  resetPassword(BuildContext context) async {
+    if (loginEmail.text.isNotEmpty) {
+      var res = await _authMethods.resetPassword(email: loginEmail.text);
+      if (res == "success") {
+        FocusManager.instance.primaryFocus?.unfocus();
+        Toast.yoToast(
+            "",
+            "Reset Link has been sent Succesfully to your email address",
+            context);
+      } else {
+        FocusManager.instance.primaryFocus?.unfocus();
+        Toast.yoToast("", res, context);
+      }
+    } else {
+      FocusManager.instance.primaryFocus?.unfocus();
+      Toast.yoToast("", "Please fill the email field", context);
+    }
+  }
   // googleLogin() async {
   //   isLoggingIn.value = true;
   //   User? user = await _authMethods.googleSingin();

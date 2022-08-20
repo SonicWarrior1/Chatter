@@ -17,7 +17,7 @@ class FirestoreMethods {
       String chatRoomId, BuildContext context, chatRoomMap) async {
     final user = Provider.of<UserProvider>(context, listen: false);
     try {
-      // String commentId = Uuid().v1();
+     
       await _firestore.collection('chatRoom').doc(chatRoomId).set(chatRoomMap);
     } on FirebaseException catch (e) {
       Toast.yoToast("", e.message.toString(), context);

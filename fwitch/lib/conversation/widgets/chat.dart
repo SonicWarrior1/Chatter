@@ -1,32 +1,15 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
-import 'package:fwitch/conversation/controller/chat_controller.dart';
 import 'package:fwitch/providers/user_provider.dart';
-import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class Chat extends StatefulWidget {
+class Chat extends StatelessWidget {
   const Chat({Key? key, required this.chatRoomId}) : super(key: key);
 
   final String chatRoomId;
 
   @override
-  State<Chat> createState() => _ChatState();
-}
-
-class _ChatState extends State<Chat> {
-  ChatController chatController = Get.put(ChatController());
-  @override
-  void initState() {
-    // TODO: implement initState
-    super.initState();
-    // chatController.scrollController
-    //     .jumpTo(chatController.scrollController.position.maxScrollExtent);
-  }
-
-  @override
   Widget build(BuildContext context) {
-    // ChatController controller = Get.put(ChatController());
     final userProvider = Provider.of<UserProvider>(context).user;
     return Column(
       mainAxisAlignment: MainAxisAlignment.center,
@@ -35,7 +18,7 @@ class _ChatState extends State<Chat> {
             child: StreamBuilder<dynamic>(
           stream: FirebaseFirestore.instance
               .collection('chatRoom')
-              .doc(widget.chatRoomId)
+              .doc(chatRoomId)
               .collection('chats')
               .orderBy(
                 "createdAt",
@@ -50,7 +33,6 @@ class _ChatState extends State<Chat> {
             return SingleChildScrollView(
               reverse: true,
               child: ListView.builder(
-                controller: chatController.scrollController,
                 shrinkWrap: true,
                 itemBuilder: (context, index) {
                   var time = DateTime.parse(snapshot

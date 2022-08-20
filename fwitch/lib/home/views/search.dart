@@ -4,7 +4,6 @@ import 'package:fwitch/resources/authMethods.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatelessWidget {
-  // SearchScreen({Key? key}) : super(key: key);
   final AuthMethods _authMethods = AuthMethods();
   SearchController searchController = Get.put(SearchController());
 
@@ -13,15 +12,7 @@ class SearchScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(actions: const [
-          // IconButton(
-          //   icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
-          //   onPressed: () {
-          //     Get.changeThemeMode(
-          //         Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-          //   },
-          // ),
-        ]),
+        appBar: AppBar(actions: const []),
         body: Column(
           children: [
             Container(
@@ -30,6 +21,10 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: TextField(
+                    onSubmitted: (val) {
+                      searchController.getUserByUsername(
+                          userName: searchController.username.text);
+                    },
                     controller: searchController.username,
                     decoration:
                         const InputDecoration(label: Text("Search Username")),

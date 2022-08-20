@@ -95,6 +95,19 @@ class AuthMethods {
     return res;
   }
 
+  Future<String> resetPassword({required String email}) async {
+    String res = "";
+    try {
+      await _auth
+          .sendPasswordResetEmail(email: email)
+          .then((value) => res = "success");
+    } on FirebaseAuthException catch (e) {
+      res = e.toString();
+    }
+
+    return res;
+  }
+
   signout() async {
     await FirebaseAuth.instance.signOut();
     Get.offAllNamed('/onBoarding');

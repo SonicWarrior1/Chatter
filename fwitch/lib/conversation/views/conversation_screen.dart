@@ -15,15 +15,7 @@ class ConversationScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(actions: const [
-          // IconButton(
-          //   icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
-          //   onPressed: () {
-          //     Get.changeThemeMode(
-          //         Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-          //   },
-          // ),
-        ]),
+        appBar: AppBar(),
         body: Column(
           children: [
             Expanded(child: Chat(chatRoomId: chatRoomId)),
@@ -74,7 +66,7 @@ class ConversationScreen extends StatelessWidget {
                                                       chatController
                                                           .image.value,
                                                       context);
-                                                  // Navigator.pop(context);
+                                             
                                                 },
                                                 child: const Text("Send"));
                                           }

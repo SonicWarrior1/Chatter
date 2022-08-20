@@ -15,7 +15,6 @@ class onBoarding extends StatelessWidget {
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
-          // crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Text(
               "Welcome to Chatter",
@@ -24,6 +23,7 @@ class onBoarding extends StatelessWidget {
             const SizedBox(
               height: 30,
             ),
+           
             SizedBox(
               width: 250,
               child: ElevatedButton(

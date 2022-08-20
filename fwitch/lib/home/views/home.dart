@@ -107,23 +107,7 @@ class HomeScreen extends StatelessWidget {
       ),
       appBar: AppBar(
         title: const Text("Chatter"),
-        //  actions: [
-        //   IconButton(
-        //     icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
-        //     onPressed: () {
-        //       Get.changeThemeMode(
-        //           Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-        //     },
-        //   ),
-        //   Tooltip(
-        //     message: "Sign Out",
-        //     child: IconButton(
-        //         onPressed: () {
-        //           showAlertDialog(context);
-        //         },
-        //         icon: const Icon(Icons.logout)),
-        //   )
-        // ]
+ 
       ),
       body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance

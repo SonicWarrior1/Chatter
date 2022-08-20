@@ -30,6 +30,12 @@ class LoginPage extends StatelessWidget {
                     : Column(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
+                          SizedBox(
+                              height: 100,
+                              child: Image.asset("assets/login.png")),
+                          SizedBox(
+                            height: 20,
+                          ),
                           TextFormField(
                             controller: loginController.loginEmail,
                             decoration: InputDecoration(
@@ -71,6 +77,44 @@ class LoginPage extends StatelessWidget {
                             obscureText: true,
                             autovalidateMode:
                                 AutovalidateMode.onUserInteraction,
+                          ),
+                          Padding(
+                            padding: const EdgeInsets.symmetric(
+                                horizontal: 10, vertical: 10),
+                            child: Row(
+                              mainAxisAlignment: MainAxisAlignment.start,
+                              children: [
+                                Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  children: [
+                                    GestureDetector(
+                                        onTap: () {
+                                          Get.offNamed("/signup");
+                                        },
+                                        child: Text(
+                                          "Don't have an account ?",
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        )),
+                                    SizedBox(
+                                      height: 5,
+                                    ),
+                                    GestureDetector(
+                                        onTap: () {
+                                          loginController
+                                              .resetPassword(context);
+                                        },
+                                        child: Text(
+                                          "Forgot Password",
+                                          style: TextStyle(
+                                              decoration:
+                                                  TextDecoration.underline),
+                                        )),
+                                  ],
+                                ),
+                              ],
+                            ),
                           ),
                           Padding(
                             padding: EdgeInsets.only(

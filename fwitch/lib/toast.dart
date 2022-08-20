@@ -14,8 +14,6 @@ class Toast {
       backgroundColor: Theme.of(context).snackBarTheme.backgroundColor,
       action: SnackBarAction(
         label: 'Close',
-
-        // textColor: Theme.of(context).colorScheme.,
         onPressed: () {
           // Code to execute.
         },
