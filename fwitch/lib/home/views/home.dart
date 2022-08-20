@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/conversation/views/conversation_screen.dart';
+import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/authMethods.dart';
@@ -124,49 +125,63 @@ class HomeScreen extends StatelessWidget {
         //   )
         // ]
       ),
-      body: StreamBuilder<dynamic>(
+      body: StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
         stream: FirebaseFirestore.instance
             .collection('chatRoom')
             .where(
               'users',
-              arrayContains: Provider.of<UserProvider>(context, listen: false)
-                  .user
-                  .username,
+              arrayContains: "Raxstar",
             )
-            // .orderBy('updatedAt')
+            .orderBy('updatedAt', descending: true)
             .snapshots(),
         builder: (context, friendSnapshot) {
           if (friendSnapshot.connectionState == ConnectionState.waiting) {
             return Container();
-          } else if (friendSnapshot.data.docs.isEmpty) {
+          } else if (friendSnapshot.hasError) {
             return const Center(
-              child: Text("Start chatting by searching their username"),
+              child: Text("Something went Wrong 😶"),
+            );
+          } else if (friendSnapshot.data!.docs.isEmpty) {
+            return Center(
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Lottie.asset('assets/no-data-found.json'),
+                  const SizedBox(
+                    height: 10,
+                  ),
+                  const Text("Start chatting by searching their username")
+                ],
+              ),
+              // child: Text("Start chatting by searching their username"),
             );
           } else {
             return ListView.builder(
-              itemCount: friendSnapshot.data.docs.length,
+              itemCount: friendSnapshot.data!.docs.length,
               itemBuilder: (context, index) {
-                return StreamBuilder<dynamic>(
+                return StreamBuilder<QuerySnapshot<Map<String, dynamic>>>(
                     stream: FirebaseFirestore.instance
                         .collection('chatRoom')
-                        .doc(friendSnapshot.data.docs[index]['chatRoomId'])
+                        .doc(friendSnapshot.data!.docs[index]['chatRoomId'])
                         .collection('chats')
                         .orderBy(
                           "createdAt",
                         )
                         .snapshots(),
                     builder: (context, chatSnapshot) {
-                      var time = DateTime.parse(chatSnapshot
-                              .data
-                              .docs[chatSnapshot.data.docs.length - 1]
-                                  ['createdAt']
-                              .toDate()
-                              .toString())
-                          .toLocal();
+                      DateTime time;
+
                       if (chatSnapshot.connectionState ==
                           ConnectionState.waiting) {
                         return Container();
                       } else {
+                        time = DateTime.parse(chatSnapshot
+                                .data!
+                                .docs[chatSnapshot.data!.docs.length - 1]
+                                    ['createdAt']
+                                .toDate()
+                                .toString())
+                            .toLocal();
                         return InkWell(
                           onTap: () {
                             Navigator.push(
@@ -174,7 +189,7 @@ class HomeScreen extends StatelessWidget {
                                 MaterialPageRoute(
                                     builder: (context) => ConversationScreen(
                                           chatRoomId: friendSnapshot
-                                              .data.docs[index]['chatRoomId'],
+                                              .data!.docs[index]['chatRoomId'],
                                         )));
                           },
                           child: Container(
@@ -189,7 +204,7 @@ class HomeScreen extends StatelessWidget {
                                   vertical: 10, horizontal: 15),
                               leading: CircleAvatar(
                                 child: Text(friendSnapshot
-                                    .data.docs[index]['chatRoomId']
+                                    .data!.docs[index]['chatRoomId']
                                     .toString()
                                     .replaceAll("_", "")
                                     .replaceAll(
@@ -202,7 +217,7 @@ class HomeScreen extends StatelessWidget {
                                     .toUpperCase()),
                               ),
                               title: Text(friendSnapshot
-                                  .data.docs[index]['chatRoomId']
+                                  .data!.docs[index]['chatRoomId']
                                   .toString()
                                   .replaceAll("_", "")
                                   .replaceAll(
@@ -211,13 +226,13 @@ class HomeScreen extends StatelessWidget {
                                           .user
                                           .username,
                                       "")),
-                              subtitle: chatSnapshot.data.docs[
-                                              chatSnapshot.data.docs.length - 1]
-                                          ['isImage'] ==
+                              subtitle: chatSnapshot.data!.docs[
+                                          chatSnapshot.data!.docs.length -
+                                              1]['isImage'] ==
                                       true
                                   ? const Text("Image")
-                                  : Text(chatSnapshot.data.docs[
-                                          chatSnapshot.data.docs.length - 1]
+                                  : Text(chatSnapshot.data!.docs[
+                                          chatSnapshot.data!.docs.length - 1]
                                       ['message']),
                               trailing: Text("$time".substring(11, 16)),
                             ),

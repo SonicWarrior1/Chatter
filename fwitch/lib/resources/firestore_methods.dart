@@ -33,14 +33,14 @@ class FirestoreMethods {
     return result.docs.map((e) => MyUser.fromMap(e.data())).toList();
   }
 
-  sendConversation(String chatRoomId, messageMap) {
+  sendConversation(String chatRoomId, messageMap) async {
     try {
-      _firestore
+      await _firestore
           .collection('chatRoom')
           .doc(chatRoomId)
           .collection('chats')
           .add(messageMap);
-      _firestore
+      await _firestore
           .collection('chatRoom')
           .doc(chatRoomId)
           .update({'updatedAt': DateTime.now()});
@@ -49,22 +49,5 @@ class FirestoreMethods {
     }
   }
 
-  // getConversation(String chatRoomId) {
-  //   try {
-  //     _firestore
-  //         .collection('chatRoom')
-  //         .doc(chatRoomId)
-  //         .collection('chats')
-  //         .snapshots();
-  //   } catch (e) {
-  //     print(e.toString());
-  //   }
-  // }
-
-  // getChatRooms(String username) {
-  //   return _firestore
-  //       .collection('chatRoom')
-  //       .where('users', arrayContains: username)
-  //       .snapshots();
-  // }
+  
 }

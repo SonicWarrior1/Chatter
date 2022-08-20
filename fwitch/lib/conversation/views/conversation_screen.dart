@@ -15,14 +15,14 @@ class ConversationScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(actions: [
-          IconButton(
-            icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
-            onPressed: () {
-              Get.changeThemeMode(
-                  Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
-            },
-          ),
+        appBar: AppBar(actions: const [
+          // IconButton(
+          //   icon: Icon(Get.isDarkMode ? Icons.sunny : Icons.wb_sunny_outlined),
+          //   onPressed: () {
+          //     Get.changeThemeMode(
+          //         Get.isDarkMode ? ThemeMode.light : ThemeMode.dark);
+          //   },
+          // ),
         ]),
         body: Column(
           children: [
