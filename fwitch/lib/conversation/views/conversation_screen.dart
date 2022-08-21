@@ -4,7 +4,9 @@ import 'package:flutter/material.dart';
 
 import 'package:fwitch/conversation/controller/chat_controller.dart';
 import 'package:fwitch/conversation/widgets/chat.dart';
+import 'package:fwitch/providers/user_provider.dart';
 import 'package:get/get.dart';
+import 'package:provider/provider.dart';
 
 class ConversationScreen extends StatelessWidget {
   String chatRoomId;
@@ -15,7 +17,11 @@ class ConversationScreen extends StatelessWidget {
     return GestureDetector(
       onTap: () => FocusManager.instance.primaryFocus?.unfocus(),
       child: Scaffold(
-        appBar: AppBar(),
+        appBar: AppBar(
+          title: Text(chatRoomId.toString().replaceAll("_", "").replaceAll(
+              Provider.of<UserProvider>(context, listen: false).user.username,
+              "")),
+        ),
         body: Column(
           children: [
             Expanded(child: Chat(chatRoomId: chatRoomId)),
@@ -66,7 +72,6 @@ class ConversationScreen extends StatelessWidget {
                                                       chatController
                                                           .image.value,
                                                       context);
-                                             
                                                 },
                                                 child: const Text("Send"));
                                           }

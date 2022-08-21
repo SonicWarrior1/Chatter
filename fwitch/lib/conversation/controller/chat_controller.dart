@@ -19,6 +19,7 @@ class ChatController extends GetxController {
   RxBool isImageLoading = false.obs;
   RxBool isImageSent = false.obs;
   Rx<Uint8List> image = Uint8List.fromList([]).obs;
+ 
   Future<Uint8List?> pickImage() async {
     FilePickerResult? pickedImage =
         await FilePicker.platform.pickFiles(type: FileType.image);
@@ -48,6 +49,11 @@ class ChatController extends GetxController {
       };
 
       firebaseMethods.sendConversation(chatRoomId, messageMap);
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
     }
   }
 
@@ -62,9 +68,12 @@ class ChatController extends GetxController {
       };
       firebaseMethods.sendConversation(chatRoomId, messageMap);
       chatText.clear();
-      scrollController.animateTo(scrollController.position.maxScrollExtent,
-          curve: Curves.easeIn, duration: const Duration(milliseconds: 100));
-      FocusManager.instance.primaryFocus?.unfocus();
+      scrollController.animateTo(
+        scrollController.position.maxScrollExtent,
+        curve: Curves.easeOut,
+        duration: const Duration(milliseconds: 300),
+      );
+      // FocusManager.instance.primaryFocus?.unfocus();
     }
   }
 }
