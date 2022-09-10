@@ -1,3 +1,3 @@
-# fwitch
+# Chat App
 
 Done 🙃
