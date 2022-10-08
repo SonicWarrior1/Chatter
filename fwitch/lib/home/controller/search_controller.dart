@@ -57,6 +57,7 @@ class SearchController extends GetxController {
           MaterialPageRoute(
               builder: (context) => ConversationScreen(
                     chatRoomId: chatRoomId,
+                  
                   )));
     } else {
       Toast.yoToast("", "You cannot send message to Yourself", context);

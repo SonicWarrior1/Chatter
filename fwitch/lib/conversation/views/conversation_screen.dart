@@ -9,9 +9,9 @@ import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
 class ConversationScreen extends StatelessWidget {
-  String chatRoomId;
+  final String chatRoomId;
   ConversationScreen({Key? key, required this.chatRoomId}) : super(key: key);
-  ChatController chatController = Get.put(ChatController());
+  final ChatController chatController = Get.put(ChatController());
   @override
   Widget build(BuildContext context) {
     return GestureDetector(
@@ -92,7 +92,7 @@ class ConversationScreen extends StatelessWidget {
                     Expanded(
                         child: TextField(
                       onSubmitted: (val) {
-                        chatController.sendMessage(chatRoomId, context);
+                        chatController.sendMessage(chatRoomId, context,);
                       },
                       controller: chatController.chatText,
                       decoration:
@@ -100,7 +100,10 @@ class ConversationScreen extends StatelessWidget {
                     )),
                     GestureDetector(
                         onTap: () {
-                          chatController.sendMessage(chatRoomId, context);
+                          chatController.sendMessage(
+                            chatRoomId,
+                            context,
+                          );
                         },
                         child: const SizedBox(
                             width: 50,

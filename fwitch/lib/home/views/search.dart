@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:fwitch/home/controller/search_controller.dart';
-import 'package:fwitch/resources/authMethods.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatelessWidget {
-  final AuthMethods _authMethods = AuthMethods();
-  SearchController searchController = Get.put(SearchController());
+ final SearchController searchController = Get.put(SearchController());
+
+  SearchScreen({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {

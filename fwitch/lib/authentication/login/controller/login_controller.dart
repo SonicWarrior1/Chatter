@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:flutter/cupertino.dart';
 import 'package:fwitch/resources/authMethods.dart';
 import 'package:fwitch/toast.dart';
@@ -20,7 +22,6 @@ class LoginController extends GetxController {
       clearControllers();
     }
   }
-
   clearControllers() {
     loginEmail.clear();
     loginPassword.clear();
@@ -44,12 +45,5 @@ class LoginController extends GetxController {
       Toast.yoToast("", "Please fill the email field", context);
     }
   }
-  // googleLogin() async {
-  //   isLoggingIn.value = true;
-  //   User? user = await _authMethods.googleSingin();
-  //   isLoggingIn.value = false;
-  //   if (user != null) {
-  //     Get.offAllNamed('/home');
-  //   }
-  // }
+
 }

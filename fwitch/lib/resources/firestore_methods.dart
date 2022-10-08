@@ -1,8 +1,11 @@
+// ignore_for_file: avoid_print, use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fwitch/models/user.dart';
-
 import 'package:fwitch/providers/user_provider.dart';
+
 import 'package:fwitch/toast.dart';
 import 'package:provider/provider.dart';
 
@@ -15,9 +18,7 @@ class FirestoreMethods {
 
   Future<void> chat(
       String chatRoomId, BuildContext context, chatRoomMap) async {
-    final user = Provider.of<UserProvider>(context, listen: false);
     try {
-     
       await _firestore.collection('chatRoom').doc(chatRoomId).set(chatRoomMap);
     } on FirebaseException catch (e) {
       Toast.yoToast("", e.message.toString(), context);
@@ -49,5 +50,20 @@ class FirestoreMethods {
     }
   }
 
-  
+  Future<void> setToken(BuildContext context) async {
+    final fcmToken = await FirebaseMessaging.instance.getToken();
+    final uid = Provider.of<UserProvider>(context, listen: false).user.uid;
+    await FirebaseFirestore.instance
+        .collection('users')
+        .doc(uid)
+        .update({'fcmToken': fcmToken});
+  }
+
+  Future<String> getToken(username) async {
+    QuerySnapshot<Map<String, dynamic>> x = await FirebaseFirestore.instance
+        .collection('users')
+        .where("username", isEqualTo: username)
+        .get();
+    return x.docs[0]['fcmToken'];
+  }
 }

@@ -1,6 +1,8 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
+import 'package:fwitch/conversation/controller/chat_controller.dart';
 import 'package:fwitch/conversation/views/conversation_screen.dart';
+import 'package:fwitch/resources/firestore_methods.dart';
 import 'package:lottie/lottie.dart';
 import 'package:url_launcher/url_launcher.dart';
 import 'package:fwitch/providers/user_provider.dart';
@@ -10,10 +12,24 @@ import 'package:fwitch/home/controller/home_controller.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends StatefulWidget {
+  const HomeScreen({Key? key}) : super(key: key);
+
+  @override
+  State<HomeScreen> createState() => _HomeScreenState();
+}
+
+class _HomeScreenState extends State<HomeScreen> {
   final AuthMethods _authMethods = AuthMethods();
+
   final HomeController homeController = HomeController();
-  HomeScreen({Key? key}) : super(key: key);
+
+  final ChatController chatController = ChatController();
+  @override
+  void initState() {
+    super.initState();
+    FirestoreMethods.firestoreMethods.setToken(context);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -155,7 +171,6 @@ class HomeScreen extends StatelessWidget {
                         .snapshots(),
                     builder: (context, chatSnapshot) {
                       DateTime time;
-
                       if (chatSnapshot.connectionState ==
                           ConnectionState.waiting) {
                         return Container();
@@ -169,13 +184,23 @@ class HomeScreen extends StatelessWidget {
                             .toLocal();
                         return InkWell(
                           onTap: () {
-                            Navigator.push(
-                                context,
-                                MaterialPageRoute(
-                                    builder: (context) => ConversationScreen(
-                                          chatRoomId: friendSnapshot
-                                              .data!.docs[index]['chatRoomId'],
-                                        )));
+                            chatController.setFcmToken(friendSnapshot
+                                .data!.docs[index]['chatRoomId']
+                                .toString()
+                                .replaceAll("_", "")
+                                .replaceAll(
+                                    Provider.of<UserProvider>(context,
+                                            listen: false)
+                                        .user
+                                        .username,
+                                    ""));
+                            Navigator.push(context,
+                                MaterialPageRoute(builder: (context) {
+                              return ConversationScreen(
+                                chatRoomId: friendSnapshot.data!.docs[index]
+                                    ['chatRoomId'],
+                              );
+                            }));
                           },
                           child: Container(
                             decoration: BoxDecoration(
