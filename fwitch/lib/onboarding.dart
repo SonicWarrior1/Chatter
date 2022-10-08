@@ -1,6 +1,5 @@
 // ignore_for_file: camel_case_types
 
-import 'package:firebase_messaging/firebase_messaging.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/controller/login_controller.dart';
 import 'package:fwitch/authentication/signup/controller/signup_controller.dart';
@@ -35,8 +34,7 @@ class onBoarding extends StatelessWidget {
                       borderRadius: BorderRadius.circular(18.0),
                     ))),
                 onPressed: () {
-                  FirebaseMessaging messaging = FirebaseMessaging.instance;
-                  messaging.getToken().then((value) => print(value));
+           
                   loginController.clearControllers();
                   Get.toNamed('/login');
                 },

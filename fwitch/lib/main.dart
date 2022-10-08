@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_const_constructors
+// ignore_for_file: prefer_const_constructors, avoid_print
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -6,12 +6,14 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/views/login_page.dart';
 import 'package:fwitch/authentication/signup/views/signup_page.dart';
+import 'package:fwitch/conversation/views/conversation_screen.dart';
 import 'package:fwitch/home/views/home.dart';
 import 'package:fwitch/home/views/search.dart';
 import 'package:fwitch/onboarding.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:fwitch/resources/authMethods.dart';
 import 'package:firebase_messaging/firebase_messaging.dart';
+import 'package:fwitch/splash_screen/views/splash_screen.dart';
 import 'package:fwitch/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
@@ -45,6 +47,8 @@ void main() async {
   });
   FirebaseMessaging.onMessageOpenedApp.listen((message) {
     print('Message clicked!');
+    String chatRoomId = message.data['chatRoomId'];
+    Get.to(ConversationScreen(chatRoomId: chatRoomId));
   });
   FirebaseMessaging.onBackgroundMessage(_messageHandler);
   runApp(MultiProvider(
@@ -85,9 +89,9 @@ class MyApp extends StatelessWidget {
             );
           }
           if (snapshot.hasData) {
-            return HomeScreen();
+            return SplashScreen(home: true);
           }
-          return onBoarding();
+          return SplashScreen(home: false);
         },
       ),
       theme: MyTheme.lightTheme,

@@ -28,7 +28,7 @@ class FirestoreMethods {
   Future<List<MyUser>> getUserByUsername(String username) async {
     final result = await _firestore
         .collection('users')
-        .where('username', isGreaterThanOrEqualTo: username)
+        .where('username', isEqualTo: username)
         .get();
 
     return result.docs.map((e) => MyUser.fromMap(e.data())).toList();

@@ -127,9 +127,8 @@ class _ChatState extends State<Chat> {
                                       .titleLarge!
                                       .copyWith(fontSize: 19),
                                 ),
-                          Text(
-                            "$time".substring(11, 16),
-                          ),
+                          Text("$time".substring(11, 16),
+                              style: Theme.of(context).textTheme.titleSmall),
                         ],
                       ),
                     ),

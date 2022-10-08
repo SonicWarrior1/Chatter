@@ -59,7 +59,7 @@ class ChatController extends GetxController {
       notificationController.sendPushMessage(
           Hive.box('users').get('fcmToken'),
           Provider.of<UserProvider>(context, listen: false).user.username,
-          "Image");
+          "Image",chatRoomId,context);
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
@@ -81,7 +81,7 @@ class ChatController extends GetxController {
       notificationController.sendPushMessage(
           Hive.box('users').get('fcmToken'),
           Provider.of<UserProvider>(context, listen: false).user.username,
-          chatText.text);
+          chatText.text,chatRoomId,context);
       chatText.clear();
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,

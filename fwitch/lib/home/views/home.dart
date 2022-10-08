@@ -154,7 +154,6 @@ class _HomeScreenState extends State<HomeScreen> {
                   const Text("Start chatting by searching their username")
                 ],
               ),
-              // child: Text("Start chatting by searching their username"),
             );
           } else {
             return ListView.builder(
@@ -255,11 +254,14 @@ class _HomeScreenState extends State<HomeScreen> {
           }
         },
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Get.toNamed('/search');
-        },
-        child: const Icon(Icons.search),
+      floatingActionButton: Tooltip(
+        message: "Search users",
+        child: FloatingActionButton(
+          onPressed: () {
+            Get.toNamed('/search');
+          },
+          child: const Icon(Icons.search),
+        ),
       ),
     );
   }
