@@ -1,7 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/conversation/controller/chat_controller.dart';
-import 'package:fwitch/conversation/widgets/image_viewer.dart';
+import 'package:fwitch/global_widgets/image_viewer.dart';
 import 'package:fwitch/providers/user_provider.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';

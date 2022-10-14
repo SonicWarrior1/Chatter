@@ -1,7 +1,7 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:fwitch/onboarding.dart';
+import 'package:fwitch/onBoarding/views/onboarding.dart';
 
 import '../../home/views/home.dart';
 

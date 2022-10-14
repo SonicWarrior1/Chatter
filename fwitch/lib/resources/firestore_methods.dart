@@ -6,7 +6,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:fwitch/models/user.dart';
 import 'package:fwitch/providers/user_provider.dart';
 
-import 'package:fwitch/toast.dart';
+import 'package:fwitch/global_widgets/toast.dart';
 import 'package:provider/provider.dart';
 
 class FirestoreMethods {

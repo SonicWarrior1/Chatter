@@ -5,7 +5,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:fwitch/models/user.dart' as model;
 import 'package:fwitch/providers/user_provider.dart';
-import 'package:fwitch/toast.dart';
+import 'package:fwitch/global_widgets/toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 

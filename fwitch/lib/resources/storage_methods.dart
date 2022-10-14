@@ -3,7 +3,7 @@
 import 'dart:typed_data';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
-import 'package:fwitch/toast.dart';
+import 'package:fwitch/global_widgets/toast.dart';
 
 class StorageMethods {
   final FirebaseStorage _storage = FirebaseStorage.instance;

@@ -1,7 +1,7 @@
 import 'dart:convert';
 
 import 'package:flutter/cupertino.dart';
-import 'package:fwitch/toast.dart';
+import 'package:fwitch/global_widgets/toast.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 

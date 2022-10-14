@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:fwitch/home/controller/search_controller.dart';
+import 'package:fwitch/search/controller/search_controller.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatelessWidget {
