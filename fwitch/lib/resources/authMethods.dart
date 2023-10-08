@@ -33,7 +33,7 @@ class AuthMethods {
             uid: creds.user!.uid,
             name: name.trim());
         await _userRef.doc(creds.user!.uid).set(user.toMap());
-        Provider.of<UserProvider>(context, listen: false).setUser(user);
+        await Provider.of<UserProvider>(context, listen: false).setUser(user);
         res = true;
         Toast.yoToast("Danm", "SignUp Succesful", context);
       }
@@ -85,7 +85,7 @@ class AuthMethods {
       UserCredential creds = await _auth.signInWithEmailAndPassword(
           email: email, password: password);
       if (creds.user != null) {
-        Provider.of<UserProvider>(context, listen: false)
+        await Provider.of<UserProvider>(context, listen: false)
             .setUser(model.MyUser.fromMap(
           await getCurrentUser(creds.user!.uid) ?? {},
         ));
@@ -110,7 +110,7 @@ class AuthMethods {
     return res;
   }
 
-  signout() async {
+  Future<void> signout() async {
     await FirebaseAuth.instance.signOut();
     Get.offAllNamed('/onBoarding');
   }

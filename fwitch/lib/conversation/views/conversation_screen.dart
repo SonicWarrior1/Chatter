@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'dart:typed_data';
 
 import 'package:flutter/material.dart';
@@ -66,8 +68,8 @@ class ConversationScreen extends StatelessWidget {
                                             );
                                           } else {
                                             return ElevatedButton(
-                                                onPressed: () {
-                                                  chatController.sendImage(
+                                                onPressed: ()async {
+                                                 await chatController.sendImage(
                                                       chatRoomId,
                                                       chatController
                                                           .image.value,

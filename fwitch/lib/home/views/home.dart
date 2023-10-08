@@ -1,3 +1,5 @@
+// ignore_for_file: use_build_context_synchronously
+
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/conversation/controller/chat_controller.dart';
@@ -182,8 +184,8 @@ class _HomeScreenState extends State<HomeScreen> {
                                 .toString())
                             .toLocal();
                         return InkWell(
-                          onTap: () {
-                            chatController.setFcmToken(friendSnapshot
+                          onTap: ()async {
+                            await chatController.setFcmToken(friendSnapshot
                                 .data!.docs[index]['chatRoomId']
                                 .toString()
                                 .replaceAll("_", "")
@@ -278,8 +280,8 @@ class _HomeScreenState extends State<HomeScreen> {
             child: const Text('Cancel'),
           ),
           TextButton(
-            onPressed: () {
-              _authMethods.signout();
+            onPressed: ()async {
+            await  _authMethods.signout();
             },
             child: const Text('Sign Out'),
           ),

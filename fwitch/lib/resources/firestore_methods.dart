@@ -34,7 +34,8 @@ class FirestoreMethods {
     return result.docs.map((e) => MyUser.fromMap(e.data())).toList();
   }
 
-  sendConversation(String chatRoomId, messageMap) async {
+  Future<void> sendConversation(
+      String chatRoomId, Map<String, dynamic> messageMap) async {
     try {
       await _firestore
           .collection('chatRoom')

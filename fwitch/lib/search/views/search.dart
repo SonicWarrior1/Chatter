@@ -3,7 +3,7 @@ import 'package:fwitch/search/controller/search_controller.dart';
 import 'package:get/get.dart';
 
 class SearchScreen extends StatelessWidget {
- final SearchController searchController = Get.put(SearchController());
+  final SearchingController searchController = Get.put(SearchingController());
 
   SearchScreen({Key? key}) : super(key: key);
 
@@ -21,8 +21,8 @@ class SearchScreen extends StatelessWidget {
                 children: [
                   Expanded(
                       child: TextField(
-                    onSubmitted: (val) {
-                      searchController.getUserByUsername(
+                    onSubmitted: (val) async {
+                      await searchController.getUserByUsername(
                           userName: searchController.username.text);
                     },
                     controller: searchController.username,
@@ -30,8 +30,8 @@ class SearchScreen extends StatelessWidget {
                         const InputDecoration(label: Text("Search Username")),
                   )),
                   GestureDetector(
-                      onTap: () {
-                        searchController.getUserByUsername(
+                      onTap: () async {
+                        await searchController.getUserByUsername(
                             userName: searchController.username.text);
                       },
                       child: const SizedBox(
@@ -64,8 +64,8 @@ class SearchScreen extends StatelessWidget {
                         ],
                       ),
                       trailing: ElevatedButton(
-                          onPressed: () {
-                            searchController.createChatRoom(
+                          onPressed: () async {
+                            await searchController.createChatRoom(
                                 searchController
                                     .userNameFilterList[index].username,
                                 context);

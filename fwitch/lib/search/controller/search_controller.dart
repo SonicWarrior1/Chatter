@@ -1,4 +1,4 @@
-// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation
+// ignore_for_file: prefer_interpolation_to_compose_strings, prefer_adjacent_string_concatenation, use_build_context_synchronously
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
@@ -10,7 +10,7 @@ import 'package:fwitch/global_widgets/toast.dart';
 import 'package:get/get.dart';
 import 'package:provider/provider.dart';
 
-class SearchController extends GetxController {
+class SearchingController extends GetxController {
   final firebaseMethods = FirestoreMethods.firestoreMethods;
   TextEditingController username = TextEditingController();
   RxList<MyUser> userNameFilterList = RxList<MyUser>();
@@ -37,7 +37,7 @@ class SearchController extends GetxController {
     }
   }
 
-  createChatRoom(String username, BuildContext context) {
+  Future<void> createChatRoom(String username, BuildContext context) async {
     if (username !=
         Provider.of<UserProvider>(context, listen: false).user.username) {
       String chatRoomId = getChatRoomId(username,
@@ -51,13 +51,12 @@ class SearchController extends GetxController {
         "chatRoomId": chatRoomId,
         "updatedAt": DateTime.now()
       };
-      firebaseMethods.chat(chatRoomId, context, chatRoomMap);
+      await firebaseMethods.chat(chatRoomId, context, chatRoomMap);
       Navigator.pushReplacement(
           context,
           MaterialPageRoute(
               builder: (context) => ConversationScreen(
                     chatRoomId: chatRoomId,
-                  
                   )));
     } else {
       Toast.yoToast("", "You cannot send message to Yourself", context);

@@ -35,13 +35,14 @@ class ChatController extends GetxController {
     return null;
   }
 
-  setFcmToken(String username) async {
+  Future<void> setFcmToken(String username) async {
     String result = await FirestoreMethods.firestoreMethods.getToken(username);
     // print(result);
-    Hive.box('users').put('fcmToken', result);
+    await Hive.box('users').put('fcmToken', result);
   }
 
-  sendImage(String chatRoomId, Uint8List file, BuildContext context) async {
+  Future<void> sendImage(
+      String chatRoomId, Uint8List file, BuildContext context) async {
     var uuid = const Uuid();
     isImageSent.value = true;
     String url = await storageMethods.uploadImageToStorage(
@@ -55,11 +56,13 @@ class ChatController extends GetxController {
         "createdAt": DateTime.now(),
         "isImage": true
       };
-      firebaseMethods.sendConversation(chatRoomId, messageMap);
-      notificationController.sendPushMessage(
-          Hive.box('users').get('fcmToken'),
+      await firebaseMethods.sendConversation(chatRoomId, messageMap);
+      await notificationController.sendPushMessage(
+          await Hive.box('users').get('fcmToken'),
           Provider.of<UserProvider>(context, listen: false).user.username,
-          "Image",chatRoomId,context);
+          "Image",
+          chatRoomId,
+          context);
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,
         curve: Curves.easeOut,
@@ -68,8 +71,9 @@ class ChatController extends GetxController {
     }
   }
 
-  sendMessage(String chatRoomId, BuildContext context) async {
+  Future<void> sendMessage(String chatRoomId, BuildContext context) async {
     if (chatText.text.isNotEmpty) {
+      
       Map<String, dynamic> messageMap = {
         "message": chatText.text,
         "sendBy":
@@ -77,11 +81,13 @@ class ChatController extends GetxController {
         "createdAt": DateTime.now(),
         "isImage": false
       };
-      firebaseMethods.sendConversation(chatRoomId, messageMap);
-      notificationController.sendPushMessage(
-          Hive.box('users').get('fcmToken'),
+      await firebaseMethods.sendConversation(chatRoomId, messageMap);
+      await notificationController.sendPushMessage(
+          await Hive.box('users').get('fcmToken'),
           Provider.of<UserProvider>(context, listen: false).user.username,
-          chatText.text,chatRoomId,context);
+          chatText.text,
+          chatRoomId,
+          context);
       chatText.clear();
       scrollController.animateTo(
         scrollController.position.maxScrollExtent,

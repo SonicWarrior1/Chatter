@@ -10,7 +10,12 @@ class MyUser {
       required this.name});
 
   Map<String, dynamic> toMap() {
-    return {'uid': uid, 'username': username, 'email': email, 'name': name};
+    return {
+      'uid': uid,
+      'username': username,
+      'email': email,
+      'name': name,
+    };
   }
 
   factory MyUser.fromMap(Map<String, dynamic> map) {
@@ -18,6 +23,6 @@ class MyUser {
         uid: map['uid'] ?? '',
         username: map['username'] ?? '',
         email: map['email'] ?? '',
-        name: map['name']);
+        name: map['name'] ?? '');
   }
 }
