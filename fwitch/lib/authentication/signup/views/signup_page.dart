@@ -94,7 +94,7 @@ class SignupPage extends StatelessWidget {
                               decoration: const InputDecoration(
                                 label: Text("Password"),
                               ),
-                              validator: (String? value) {
+                              validator: (String? value) {            
                                 if (value == null || value.isEmpty) {
                                   return 'Please enter your password.'.tr;
                                 }

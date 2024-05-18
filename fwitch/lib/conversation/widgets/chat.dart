@@ -52,25 +52,25 @@ class _ChatState extends State<Chat> {
                           .toString())
                       .toLocal();
                   return ListTile(
-                    contentPadding: const EdgeInsets.symmetric(
-                        vertical: 10, horizontal: 15),
-                    title: Align(
-                      alignment: snapshot.data.docs[index]['sendBy'] ==
-                              userProvider.username
-                          ? Alignment.centerRight
-                          : Alignment.centerLeft,
-                      child: Text(
-                        snapshot.data.docs[index]['sendBy'],
-                        style: TextStyle(
-                          color: snapshot.data.docs[index]['sendBy'] ==
-                                  userProvider.username
-                              ? Theme.of(context).colorScheme.secondary
-                              : Theme.of(context).colorScheme.primary,
-                          fontSize:
-                              Theme.of(context).textTheme.labelLarge!.fontSize,
-                        ),
-                      ),
-                    ),
+                    contentPadding:
+                        const EdgeInsets.symmetric(vertical: 0, horizontal: 15),
+                    // title: Align(
+                    //   alignment: snapshot.data.docs[index]['sendBy'] ==
+                    //           userProvider.username
+                    //       ? Alignment.centerRight
+                    //       : Alignment.centerLeft,
+                    //   child: Text(
+                    //     snapshot.data.docs[index]['sendBy'],
+                    //     style: TextStyle(
+                    //       color: snapshot.data.docs[index]['sendBy'] ==
+                    //               userProvider.username
+                    //           ? Theme.of(context).colorScheme.secondary
+                    //           : Theme.of(context).colorScheme.primary,
+                    //       fontSize:
+                    //           Theme.of(context).textTheme.labelLarge!.fontSize,
+                    //     ),
+                    //   ),
+                    // ),
                     subtitle: Align(
                       alignment: snapshot.data.docs[index]['sendBy'] ==
                               userProvider.username
@@ -120,12 +120,22 @@ class _ChatState extends State<Chat> {
                                     ),
                                   ),
                                 )
-                              : Text(
-                                  snapshot.data.docs[index]['message'],
-                                  style: Theme.of(context)
-                                      .textTheme
-                                      .titleLarge!
-                                      .copyWith(fontSize: 19),
+                              : Card(
+                                  shape: RoundedRectangleBorder(
+                                      side: const BorderSide(
+                                          color: Colors.black, width: 1.5),
+                                      borderRadius: BorderRadius.circular(20)),
+                                  child: Padding(
+                                    padding: const EdgeInsets.symmetric(
+                                        vertical: 10, horizontal: 20),
+                                    child: Text(
+                                      snapshot.data.docs[index]['message'],
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleLarge!
+                                          .copyWith(fontSize: 19),
+                                    ),
+                                  ),
                                 ),
                           Text("$time".substring(11, 16),
                               style: Theme.of(context).textTheme.titleSmall),

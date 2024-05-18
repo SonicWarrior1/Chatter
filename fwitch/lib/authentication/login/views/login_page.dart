@@ -5,7 +5,7 @@ import 'package:fwitch/authentication/login/controller/login_controller.dart';
 import 'package:get/get.dart';
 
 class LoginPage extends StatelessWidget {
-  LoginPage({Key? key}) : super(key: key);
+  LoginPage({Key? key}) : super(key: key); 
   LoginController loginController = Get.put(LoginController());
   @override
   Widget build(BuildContext context) {

@@ -2,7 +2,7 @@ import 'package:flex_color_scheme/flex_color_scheme.dart';
 
 class MyTheme {
   static final lightTheme = FlexThemeData.light(
-    scheme: FlexScheme.bahamaBlue,
+    scheme: FlexScheme.money,
     surfaceMode: FlexSurfaceMode.highScaffoldLowSurface,
     blendLevel: 20,
     appBarStyle: FlexAppBarStyle.material,
@@ -40,5 +40,4 @@ class MyTheme {
 // If you do not have a themeMode switch, uncomment this line
 // to let the device system mode control the theme mode:
 // themeMode: ThemeMode.system,
-
 }

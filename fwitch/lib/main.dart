@@ -2,7 +2,6 @@
 
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:fwitch/authentication/login/views/login_page.dart';
 import 'package:fwitch/authentication/signup/views/signup_page.dart';
@@ -17,7 +16,7 @@ import 'package:fwitch/splash_screen/views/splash_screen.dart';
 import 'package:fwitch/theme.dart';
 import 'package:hive_flutter/hive_flutter.dart';
 import 'package:get/get.dart';
-
+import 'firebase_options.dart';
 import 'package:provider/provider.dart';
 import 'models/user.dart' as model;
 
@@ -29,18 +28,9 @@ void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   await Hive.initFlutter();
   await Hive.openBox('users');
-  if (kIsWeb) {
-    await Firebase.initializeApp(
-        options: FirebaseOptions(
-            apiKey: "AIzaSyDfacIaxinbnuA2KDcvpXOzGEeQ89koJ0w",
-            authDomain: "fwitch-8e933.firebaseapp.com",
-            projectId: "fwitch-8e933",
-            storageBucket: "fwitch-8e933.appspot.com",
-            messagingSenderId: "458236514278",
-            appId: "1:458236514278:web:c6073e600dac9c7414d027"));
-  } else {
-    await Firebase.initializeApp();
-  }
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   FirebaseMessaging.onMessage.listen((RemoteMessage event) {
     print("message recieved");
     print(event.notification!.body);
@@ -96,7 +86,7 @@ class MyApp extends StatelessWidget {
       ),
       theme: MyTheme.lightTheme,
       darkTheme: MyTheme.darkTheme,
-      themeMode: ThemeMode.system,
+      themeMode: ThemeMode.light,
       debugShowCheckedModeBanner: false,
     );
   }
